@@ -10,6 +10,7 @@
 		EEBEE67C22A4055D009CF602 /* AnimationImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEBEE67222A4055D009CF602 /* AnimationImage.framework */; };
 		EEBEE68122A4055D009CF602 /* AnimationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBEE68022A4055D009CF602 /* AnimationImageTests.swift */; };
 		EEBEE68322A4055D009CF602 /* AnimationImage.h in Headers */ = {isa = PBXBuildFile; fileRef = EEBEE67522A4055D009CF602 /* AnimationImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EEBEE68D22A40625009CF602 /* AnimationImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBEE68C22A40625009CF602 /* AnimationImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		EEBEE67B22A4055D009CF602 /* AnimationImageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnimationImageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEBEE68022A4055D009CF602 /* AnimationImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationImageTests.swift; sourceTree = "<group>"; };
 		EEBEE68222A4055D009CF602 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EEBEE68C22A40625009CF602 /* AnimationImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				EEBEE67522A4055D009CF602 /* AnimationImage.h */,
+				EEBEE68C22A40625009CF602 /* AnimationImage.swift */,
 				EEBEE67622A4055D009CF602 /* Info.plist */,
 			);
 			path = AnimationImage;
@@ -148,6 +151,7 @@
 				TargetAttributes = {
 					EEBEE67122A4055D009CF602 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 					EEBEE67A22A4055D009CF602 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -194,6 +198,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEBEE68D22A40625009CF602 /* AnimationImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +345,7 @@
 		EEBEE68722A4055D009CF602 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -350,7 +356,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = AnimationImage/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -359,6 +365,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.djhan.AnimationImage;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -366,6 +373,7 @@
 		EEBEE68822A4055D009CF602 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -376,7 +384,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = AnimationImage/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -392,6 +400,7 @@
 		EEBEE68A22A4055D009CF602 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = E7829W88M3;
@@ -410,6 +419,7 @@
 		EEBEE68B22A4055D009CF602 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = E7829W88M3;
