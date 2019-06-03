@@ -42,7 +42,6 @@ public class AnimationImage: NSObject, Collection {
     public var numberOfItems = 1
     
     // 실제로는 1장뿐인 정지 이미지 여부
-    // 이 경우, 효과, 회전 적용시 ImageCache의 AdditionalImage를 사용한다
     public var isStill: Bool {
         get {
             // 이미지 개수가 1개 이상인 경우 false 반환
