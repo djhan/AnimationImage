@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-
+import AnimationImagePrivate
 
 // MARK: -AnimationImage Delegate Protocol
 //==============================================================//

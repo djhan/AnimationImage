@@ -1,0 +1,5 @@
+module AnimationImagePrivate {
+    header "WebpFramework_umbrella.h"
+
+    export *
+}
