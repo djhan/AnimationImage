@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		EE1A8EAE22A676CD00969F22 /* WebpFramework_umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */; };
+		EE394D2F22A6969200198FDB /* GifImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE394D2E22A6969200198FDB /* GifImage.swift */; };
+		EE394D3122A6969D00198FDB /* PngImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE394D3022A6969D00198FDB /* PngImage.swift */; };
 		EE5FA62622A52409006FD036 /* WebpFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE5FA62522A52409006FD036 /* WebpFramework.framework */; };
 		EEBEE67C22A4055D009CF602 /* AnimationImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEBEE67222A4055D009CF602 /* AnimationImage.framework */; };
 		EEBEE68122A4055D009CF602 /* AnimationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBEE68022A4055D009CF602 /* AnimationImageTests.swift */; };
@@ -28,6 +30,8 @@
 /* Begin PBXFileReference section */
 		EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebpFramework_umbrella.h; sourceTree = "<group>"; };
 		EE1A8EAF22A6777800969F22 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		EE394D2E22A6969200198FDB /* GifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImage.swift; sourceTree = "<group>"; };
+		EE394D3022A6969D00198FDB /* PngImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PngImage.swift; sourceTree = "<group>"; };
 		EE5FA62522A52409006FD036 /* WebpFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WebpFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEBEE67222A4055D009CF602 /* AnimationImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AnimationImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEBEE67522A4055D009CF602 /* AnimationImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationImage.h; sourceTree = "<group>"; };
@@ -58,6 +62,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EE394D2822A6964F00198FDB /* GIF */ = {
+			isa = PBXGroup;
+			children = (
+				EE394D2E22A6969200198FDB /* GifImage.swift */,
+			);
+			path = GIF;
+			sourceTree = "<group>";
+		};
+		EE394D2922A6965D00198FDB /* PNG */ = {
+			isa = PBXGroup;
+			children = (
+				EE394D3022A6969D00198FDB /* PngImage.swift */,
+			);
+			path = PNG;
+			sourceTree = "<group>";
+		};
 		EE5FA62422A52409006FD036 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +108,8 @@
 		EEBEE67422A4055D009CF602 /* AnimationImage */ = {
 			isa = PBXGroup;
 			children = (
+				EE394D2922A6965D00198FDB /* PNG */,
+				EE394D2822A6964F00198FDB /* GIF */,
 				EE1A8EAF22A6777800969F22 /* module.modulemap */,
 				EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */,
 				EEBEE67522A4055D009CF602 /* AnimationImage.h */,
@@ -216,6 +238,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE394D3122A6969D00198FDB /* PngImage.swift in Sources */,
+				EE394D2F22A6969200198FDB /* GifImage.swift in Sources */,
 				EEBEE68D22A40625009CF602 /* AnimationImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

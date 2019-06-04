@@ -19,6 +19,17 @@ public protocol AnimationImageDelegate: class {
 
 // MARK: -AnimationImage Class
 public class AnimationImage: NSObject, Collection {
+    // 종류
+    enum type {
+        // GIF
+        case gif
+        // PNG
+        case png
+        // webp
+        case webp
+    }
+    
+    
     // MARK: Collection Protocol Related
     // collection 프로토콜용 메쏘드 및 프로퍼티
     public func index(after i: Int) -> Int {
@@ -28,7 +39,10 @@ public class AnimationImage: NSObject, Collection {
         get { return 0 }
     }
     public var endIndex: Int {
-        get { return self.numberOfItems - 1 }
+        get {
+            let _endIndex = self.numberOfItems - 1
+            return _endIndex >= 0 ? _endIndex : 0
+        }
     }
     // collection 프로토콜용 메쏘드 및 프로퍼티 종료
 
@@ -67,7 +81,7 @@ public class AnimationImage: NSObject, Collection {
         // delegate 대입
         self.delegate = delegate
     }
-    
+
     // MARK: Method
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용시에도 중요
     public subscript(index: Int)-> NSImage? {
@@ -75,4 +89,5 @@ public class AnimationImage: NSObject, Collection {
 
         return nil
     }
+    
 }
