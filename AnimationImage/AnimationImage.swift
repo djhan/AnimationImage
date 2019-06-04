@@ -8,12 +8,13 @@
 
 import Cocoa
 
+
 // MARK: -AnimationImage Delegate Protocol
 //==============================================================//
 // Animation Image Delegate Protocol
 //==============================================================//
 public protocol AnimationImageDelegate: class {
-    
+
 }
 
 // MARK: -AnimationImage Class
@@ -35,7 +36,7 @@ public class AnimationImage: NSObject, Collection {
     lazy var originalCache = NSCache<NSNumber, NSImage>()
     // 변형 전용 캐쉬
     lazy var additionalCache = NSCache<NSNumber, NSImage>()
-    
+
     // 현재 인덱스
     public var currentIndex = 0
     // 총 이미지 개수
@@ -70,6 +71,7 @@ public class AnimationImage: NSObject, Collection {
     // MARK: Method
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용시에도 중요
     public subscript(index: Int)-> NSImage? {
+      
 
         return nil
     }
