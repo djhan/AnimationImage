@@ -70,8 +70,8 @@
 			isa = PBXGroup;
 			children = (
 				EE8F24B022A7351300F9E0BA /* AnimationConvertible.swift */,
-				EE394D3022A6969D00198FDB /* PngImage.swift */,
 				EE394D2E22A6969200198FDB /* GifImage.swift */,
+				EE394D3022A6969D00198FDB /* PngImage.swift */,
 				EE8F24B622A74BBC00F9E0BA /* WebpExImage.swift */,
 			);
 			path = Animations;

@@ -40,23 +40,29 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
     internal var webpImage: WebpImage?
 
     // MARK: Initialization
-    // URL로 초기화
-    init(from url:URL) {
+    // 초기화
+    init(from imageSource: CGImageSource) {
         super.init()
-        
-        self.imageSource = CGImageSourceCreateWithURL(url as CFURL, nil)
+        // 이미지 소스 대입
+        self.imageSource = imageSource
         // 소스 설정시 PNG 로 설정
-        if self.imageSource != nil { self.type = .png }
+        self.type = .png
+    }
+    // URL로 초기화
+    convenience init?(from url:URL) {
+        // 이미지 소스 생성 실패시 nil 반환
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        // 정상적으로 초기화
+        self.init(from: imageSource)
     }
     
     // Data로 초기화
-    init(from data:Data) {
-        super.init()
-        
-        self.imageSource = CGImageSourceCreateWithData(data as CFData, nil)
-        // 소스 설정시 PNG 로 설정
-        if self.imageSource != nil { self.type = .png }
+    convenience init?(from data:Data) {
+        // 이미지 소스 생성 실패시 nil 반환
+        guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        // 정상적으로 초기화
+        self.init(from: imageSource)
     }
-    
+
     // MARK: Method
 }

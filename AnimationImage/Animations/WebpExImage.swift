@@ -39,22 +39,28 @@ class WebpExImage: DefaultAnimationImage, AnimationConvertible {
     internal var source: CGImageSource?
     
     // MARK: Initialization
-    // URL로 초기화
-    init(from url:URL) {
+    // 초기화
+    init(from imageSource: WebpImage) {
         super.init()
-        
-        self.imageSource = WebpImage.init(url: url)
+        // 이미지 소스 대입
+        self.imageSource = imageSource
         // 소스 설정시 webp 로 설정
-        if self.imageSource != nil { self.type = .webp }
+        self.type = .webp
+    }
+    // URL로 초기화
+    convenience init?(from url:URL) {
+        // 이미지 소스 생성 실패시 nil 반환
+        guard let imageSource = WebpImage.init(url: url) else { return nil }
+        // 정상적으로 초기화
+        self.init(from: imageSource)
     }
     
     // Data로 초기화
-    init(from data:Data) {
-        super.init()
-        
-        self.imageSource = WebpImage.init(data: data)
-        // 소스 설정시 webp 로 설정
-        if self.imageSource != nil { self.type = .webp }
+    convenience init?(from data:Data) {
+        // 이미지 소스 생성 실패시 nil 반환
+        guard let imageSource = WebpImage.init(data: data) else { return nil }
+        // 정상적으로 초기화
+        self.init(from: imageSource)
     }
     
     // MARK: Method

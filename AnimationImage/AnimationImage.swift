@@ -28,6 +28,7 @@ public protocol AnimationImageDelegate: class {
 //==============================================================//
 public class AnimationImage : NSObject, Collection {
     // MARK: AnimationImage Enumerations
+    // 종류
     public enum type {
         // GIF
         case gif
@@ -38,6 +39,7 @@ public class AnimationImage : NSObject, Collection {
         // Unknown
         case unknown
     }
+    // 캐쉬 종류
     public enum cache {
         // original
         case original
@@ -131,35 +133,51 @@ public class AnimationImage : NSObject, Collection {
         self.type = type
     }
     // URL + Delegate로 초기화 실행
-    convenience init(from url: URL, type: AnimationImage.type, with delegate: AnimationImageDelegate) {
-        self.init(with: delegate, type: type)
+    convenience init?(from url: URL, type: AnimationImage.type, with delegate: AnimationImageDelegate) {
         // 종류별로 image를 초기화
-        switch self.type {
+        switch type {
         case .gif:
-            self.image = GifImage.init(from: url)
+            guard let image = GifImage.init(from: url) else { return nil }
+            // 초기화 실행
+            self.init(with: delegate, type: type)
+            self.image = image
         case .png:
-            self.image = PngImage.init(from: url)
+            guard let image = PngImage.init(from: url) else { return nil }
+            // 초기화 실행
+            self.init(with: delegate, type: type)
+            self.image = image
         case .webp:
-            self.image = WebpExImage.init(from: url)
-        default:
+            guard let image = WebpExImage.init(from: url) else { return nil }
+            // 초기화 실행
+            self.init(with: delegate, type: type)
+            self.image = image
+        case .unknown:
             // 초기화 중지
-            return
+            return nil
         }
     }
     // Data + Delegate로 초기화 실행
-    convenience init(from data: Data, type: AnimationImage.type,  with delegate: AnimationImageDelegate) {
-        self.init(with: delegate, type: type)
+    convenience init?(from data: Data, type: AnimationImage.type,  with delegate: AnimationImageDelegate) {
         // 종류별로 image를 초기화
-        switch self.type {
+        switch type {
         case .gif:
-            self.image = GifImage.init(from: data)
+            guard let image = GifImage.init(from: data) else { return nil }
+            // 초기화 실행
+            self.init(with: delegate, type: type)
+            self.image = image
         case .png:
-            self.image = PngImage.init(from: data)
+            guard let image = PngImage.init(from: data) else { return nil }
+            // 초기화 실행
+            self.init(with: delegate, type: type)
+            self.image = image
         case .webp:
-            self.image = WebpExImage.init(from: data)
-        default:
+            guard let image = WebpExImage.init(from: data) else { return nil }
+            // 초기화 실행
+            self.init(with: delegate, type: type)
+            self.image = image
+        case .unknown:
             // 초기화 중지
-            return
+            return nil
         }
     }
 
@@ -192,7 +210,7 @@ public class AnimationImage : NSObject, Collection {
         }
     }
     // 이미지 생성후 캐쉬에 저장
-    private func makeImage(from index: Int, at target: AnimationImage.cache)-> NSImage? {
+    private func makeImage(from index: Int, at cache: AnimationImage.cache)-> NSImage? {
         // 반환용 이미지
         var image: NSImage?
         switch self.type {
@@ -211,7 +229,7 @@ public class AnimationImage : NSObject, Collection {
         // 이미지를 가져오는 데 성공한 경우
         if image != nil {
             // 캐쉬에 저장
-            switch target {
+            switch cache {
             case .original:
                 self.originalCache.setObject(image!, forKey: NSNumber.init(value: index))
             case .additional:
@@ -235,4 +253,19 @@ public class AnimationImage : NSObject, Collection {
         return nil
     }
     
+    // MARK: Manage Cache
+    // 전체 제거
+    public func clearAllCaches()-> Void {
+        self.clearCache(at: .original)
+        self.clearCache(at: .additional)
+    }
+    // 특정 캐쉬 제거
+    public func clearCache(at cache: AnimationImage.cache)-> Void {
+        switch cache {
+        case .original:
+            self.originalCache.removeAllObjects()
+        case .additional:
+            self.additionalCache.removeAllObjects()
+        }
+    }
 }
