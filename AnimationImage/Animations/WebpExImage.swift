@@ -15,12 +15,12 @@ import AnimationImagePrivate
 // AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
 //
 //================================================================================//
-class WebpExImage: NSObject, AnimationConvertible {
+class WebpExImage: DefaultAnimationImage, AnimationConvertible {
     // 소스 타입 연관값
     typealias SourceType = WebpImage
     
     // 종류
-    public var type: AnimationImage.type = .unknown
+    // type: DefaultAnimationImage에서 선언됨
     // webp 이미지 소스
     internal var imageSource: SourceType? {
         didSet {
@@ -37,10 +37,6 @@ class WebpExImage: NSObject, AnimationConvertible {
     }
     // 사용하지 않음
     internal var source: CGImageSource?
-    // 
-    public var size: NSSize = NSZeroSize
-    // 반복 횟수
-    public var loopCount: UInt = 0
     
     // MARK: Initialization
     // URL로 초기화

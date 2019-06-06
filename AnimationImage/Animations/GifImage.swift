@@ -16,12 +16,12 @@ import AnimationImagePrivate
 //
 //================================================================================//
 // MARK: - GIFImageClass
-class GifImage: NSObject, AnimationConvertible {
+class GifImage: DefaultAnimationImage, AnimationConvertible {
     // 소스의 연관값
     typealias SourceType = CGImageSource
 
     // 종류
-    public var type: AnimationImage.type = .unknown
+    // type: DefaultAnimationImage에서 선언됨
     // 이미지 소스
     internal var imageSource: SourceType? {
         // 설정 직후 할 일
@@ -39,10 +39,6 @@ class GifImage: NSObject, AnimationConvertible {
     }
     // 사용하지 않음
     internal var webpImage: WebpImage?
-    // 크기: NSZeroSize로 초기화
-    public var size: NSSize = NSZeroSize
-    // 반복 횟수 = 0으로 초기화
-    public var loopCount: UInt = 0
     
     // MARK: Initialization
     // URL로 초기화

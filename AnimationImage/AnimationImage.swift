@@ -14,10 +14,18 @@ import AnimationImagePrivate
 // Animation Image Delegate Protocol
 //==============================================================//
 public protocol AnimationImageDelegate: class {
-
+    // 변형 적용 여부
+    var isTransformation: Bool { get }
 }
 
 // MARK: -AnimationImage Class
+//==============================================================//
+//
+// Animation Image Class
+// 미완성 부분: subscript에서 이미지 반환시 additinoalImage를 생성하는 부분
+//
+//
+//==============================================================//
 public class AnimationImage : NSObject, Collection {
     // MARK: AnimationImage Enumerations
     public enum type {
@@ -29,6 +37,12 @@ public class AnimationImage : NSObject, Collection {
         case webp
         // Unknown
         case unknown
+    }
+    public enum cache {
+        // original
+        case original
+        // additional
+        case additional
     }
 
     // MARK: Collection Protocol Related
@@ -57,13 +71,12 @@ public class AnimationImage : NSObject, Collection {
     // 총 이미지 개수
     public var numberOfItems: Int {
         get {
-            
             return 0
         }
     }
 
     // 이미지 소스
-    private var image: AnyObject?
+    private var image: DefaultAnimationImage?
     // 이미지 종류
     private var type: AnimationImage.type = .unknown
     // 종류별로 다운캐스팅된 이미지 소스
@@ -95,7 +108,6 @@ public class AnimationImage : NSObject, Collection {
             else { return false }
         }
     }
-    
     // 현재 이미지 - 현재 인덱스의 이미지 반환
     public var currentImage: NSImage? {
         get {
@@ -154,7 +166,73 @@ public class AnimationImage : NSObject, Collection {
     // MARK: Method
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용시에도 중요
     public subscript(index: Int)-> NSImage? {
-
+        // 델리게이트로부터 변형 여부를 가져온다
+        // 델리게이트가 nil인 경우, nil 반환
+        guard let isTransformation = delegate?.isTransformation else { return nil }
+        // 반환용 이미지
+        var image: NSImage?
+        // 검색용 Cache 종류
+        let target: AnimationImage.cache = isTransformation == false ? .original : .additional
+        
+        // 캐쉬에서 이미지를 가져온다
+        switch target {
+        case .original:
+            image = self.originalCache.object(forKey: NSNumber.init(value: index))
+        case .additional:
+            image = self.additionalCache.object(forKey: NSNumber.init(value: index))
+        }
+        // 캐쉬에서 이미지를 가져왔는지 여부를 확인
+        if image != nil {
+            // 성공시 반환
+            return image
+        }
+            // 캐쉬 미작성시, 생성후 반환
+        else {
+            return self.makeImage(from: index, at: target)
+        }
+    }
+    // 이미지 생성후 캐쉬에 저장
+    private func makeImage(from index: Int, at target: AnimationImage.cache)-> NSImage? {
+        // 반환용 이미지
+        var image: NSImage?
+        switch self.type {
+        case .gif:
+            guard let gifImage = self.gifImage else { return nil }
+            image = gifImage[index]
+        case .png:
+            guard let pngImage = self.pngImage else { return nil }
+            image = pngImage[index]
+        case .webp:
+            guard let webpImage = self.webpImage else { return nil }
+            image = webpImage[index]
+        case .unknown:
+            return nil
+        }
+        // 이미지를 가져오는 데 성공한 경우
+        if image != nil {
+            // 캐쉬에 저장
+            switch target {
+            case .original:
+                self.originalCache.setObject(image!, forKey: NSNumber.init(value: index))
+            case .additional:
+                //
+                //
+                //
+                //
+                // 가져온 원본 이미지 (image)를 기반으로
+                // 이미지 변형 처리 필요
+                //
+                //
+                //
+                //
+                self.additionalCache.setObject(image!, forKey: NSNumber.init(value: index))
+            }
+            
+            // 반환
+            return image
+        }
+        // 그 외의 경우 NIL 반환
         return nil
     }
+    
 }

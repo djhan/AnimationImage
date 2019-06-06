@@ -12,16 +12,16 @@ import AnimationImagePrivate
 
 // MARK: Animation Convertible Protocol
 public protocol AnimationConvertible: Collection {
-    // type
-    var type: AnimationImage.type { get }
     // 소스 연관 타입 설정
     associatedtype SourceType
     // 이미지 소스
     var imageSource: SourceType? { get }
     
+    // DefaultAnimationImage 클래스에서 선언
+    // type
+    var type: AnimationImage.type { get }
     // 크기
     var size: NSSize { get set }
-    
     // 애니메이션 여부
     var isAnimation: Bool { get }
     // 루프 횟수
@@ -136,4 +136,18 @@ extension AnimationConvertible {
         // 이외의 경우, NIL 반환
         return nil
     }
+}
+
+// MARK: - Default Animation Image Class for Identification
+public class DefaultAnimationImage: NSObject {
+    // Dummy Class
+    override init() {
+        super.init()
+    }
+    // type
+    var type: AnimationImage.type = .unknown
+    // 크기: NSZeroSize로 초기화
+    public var size: NSSize = NSZeroSize
+    // 반복 횟수 = 0으로 초기화
+    public var loopCount: UInt = 0
 }
