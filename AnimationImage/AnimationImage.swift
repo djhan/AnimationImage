@@ -57,8 +57,8 @@ public class AnimationImage : NSObject, Collection {
     }
     public var endIndex: Int {
         get {
-            let _endIndex = self.numberOfItems - 1
-            return _endIndex >= 0 ? _endIndex : 0
+            // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, numberOfItems를 반환하면 된다!
+            return self.numberOfItems
         }
     }
     // collection 프로토콜용 메쏘드 및 프로퍼티 종료

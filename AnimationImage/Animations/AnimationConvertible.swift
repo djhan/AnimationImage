@@ -103,8 +103,8 @@ extension AnimationConvertible {
     }
     public var endIndex: Int {
         get {
-            let _endIndex = self.frameCount - 1
-            return _endIndex >= 0 ? _endIndex : 0
+            // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, frameCount를 반환하면 된다!
+            return self.frameCount
         }
     }
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
