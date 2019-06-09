@@ -32,7 +32,7 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
             }
             // NSNumber로 loopCount 값을 받아온다
             // 값을 받아오지 못한 경우는 실패 처리
-            guard let loopCount = self.getDictionaryValue(at: NSNotFound, key: kCGImagePropertyAPNGLoopCount as NSString) as? NSNumber else { return }
+            guard let loopCount = self.dictionaryValue(at: NSNotFound, key: kCGImagePropertyAPNGLoopCount as NSString) as? NSNumber else { return }
             self.loopCount = UInt(truncating: loopCount)
         }
     }

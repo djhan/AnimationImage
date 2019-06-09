@@ -41,7 +41,7 @@ extension AnimationConvertible {
     }
     
     // GIF/PNG의 특정 인덱스의 메타데이터 딕셔너리에서 값을 구한다
-    public func getDictionaryValue(at index: Int, key: NSString) -> Any?  {
+    public func dictionaryValue(at index: Int, key: NSString) -> Any?  {
         // webp 또는 unknown 포맷은 처리 불가, NIL 반환
         if self.type == .webp || self.type == .unknown { return nil }
         // imageSource가 제대로 설정되지 않은 경우 중지
