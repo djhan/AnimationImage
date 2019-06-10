@@ -43,8 +43,8 @@ public class AnimationImage : NSObject, Collection {
     public enum cache {
         // original
         case original
-        // additional
-        case additional
+        // transformation
+        case transformation
     }
 
     // MARK: Collection Protocol Related
@@ -66,7 +66,7 @@ public class AnimationImage : NSObject, Collection {
     // 기본 캐쉬
     private lazy var originalCache = NSCache<NSNumber, NSImage>()
     // 변형 전용 캐쉬
-    private lazy var additionalCache = NSCache<NSNumber, NSImage>()
+    private lazy var transformationCache = NSCache<NSNumber, NSImage>()
 
     // 현재 인덱스
     public var currentIndex = 0
@@ -133,7 +133,7 @@ public class AnimationImage : NSObject, Collection {
         self.type = type
     }
     // URL + Delegate로 초기화 실행
-    convenience init?(from url: URL, type: AnimationImage.type, with delegate: AnimationImageDelegate) {
+    public convenience init?(from url: URL, type: AnimationImage.type, with delegate: AnimationImageDelegate) {
         // 종류별로 image를 초기화
         switch type {
         case .gif:
@@ -157,7 +157,7 @@ public class AnimationImage : NSObject, Collection {
         }
     }
     // Data + Delegate로 초기화 실행
-    convenience init?(from data: Data, type: AnimationImage.type,  with delegate: AnimationImageDelegate) {
+    public convenience init?(from data: Data, type: AnimationImage.type,  with delegate: AnimationImageDelegate) {
         // 종류별로 image를 초기화
         switch type {
         case .gif:
@@ -190,14 +190,14 @@ public class AnimationImage : NSObject, Collection {
         // 반환용 이미지
         var image: NSImage?
         // 검색용 Cache 종류
-        let target: AnimationImage.cache = isTransformation == false ? .original : .additional
+        let target: AnimationImage.cache = isTransformation == false ? .original : .transformation
         
         // 캐쉬에서 이미지를 가져온다
         switch target {
         case .original:
             image = self.originalCache.object(forKey: NSNumber.init(value: index))
-        case .additional:
-            image = self.additionalCache.object(forKey: NSNumber.init(value: index))
+        case .transformation:
+            image = self.transformationCache.object(forKey: NSNumber.init(value: index))
         }
         // 캐쉬에서 이미지를 가져왔는지 여부를 확인
         if image != nil {
@@ -232,7 +232,7 @@ public class AnimationImage : NSObject, Collection {
             switch cache {
             case .original:
                 self.originalCache.setObject(image!, forKey: NSNumber.init(value: index))
-            case .additional:
+            case .transformation:
                 //
                 //
                 //
@@ -243,7 +243,7 @@ public class AnimationImage : NSObject, Collection {
                 //
                 //
                 //
-                self.additionalCache.setObject(image!, forKey: NSNumber.init(value: index))
+                self.transformationCache.setObject(image!, forKey: NSNumber.init(value: index))
             }
             
             // 반환
@@ -257,15 +257,15 @@ public class AnimationImage : NSObject, Collection {
     // 전체 제거
     public func clearAllCaches()-> Void {
         self.clearCache(at: .original)
-        self.clearCache(at: .additional)
+        self.clearCache(at: .transformation)
     }
     // 특정 캐쉬 제거
     public func clearCache(at cache: AnimationImage.cache)-> Void {
         switch cache {
         case .original:
             self.originalCache.removeAllObjects()
-        case .additional:
-            self.additionalCache.removeAllObjects()
+        case .transformation:
+            self.transformationCache.removeAllObjects()
         }
     }
 }
