@@ -173,7 +173,8 @@ public class AnimationImage : NSObject, Collection {
         self.delegate = delegate
         // 종류 대입
         self.type = type
-        // 마지막 인덱스가 있는 경우, currentIndex를 lastIndex로 변경
+        
+        // delegate에 마지막 인덱스가 있는 경우, currentIndex를 lastIndex로 변경
         if let lastIndex = self.delegate?.animationLastIndex {
             self.currentIndex = lastIndex
         }
@@ -280,6 +281,8 @@ public class AnimationImage : NSObject, Collection {
             case .original:
                 self.originalCache.setObject(image!, forKey: NSNumber.init(value: index))
             case .transformation:
+                // 오리지날 캐쉬에서 이미지를 가져온다
+                //
                 //
                 //
                 //
