@@ -16,6 +16,8 @@ import AnimationImagePrivate
 public protocol AnimationImageDelegate: class {
     // 변형 적용 여부
     var isTransformation: Bool { get }
+    // 애니메이션 이미지의 Last Frame Index
+    var animationLastIndex: Int? { get set }
 }
 
 // MARK: -AnimationImage Class
@@ -71,7 +73,13 @@ public class AnimationImage : NSObject, Collection {
     private lazy var delays                 = [Int: Float]()
 
     // 현재 인덱스
-    public var currentIndex = 0
+    public var currentIndex = 0 {
+        didSet {
+            guard let delegate = self.delegate else { return }
+            // delegate의 마지막 애니메이션 프레임 인덱스 값을 currentIndex로 변경한다
+            delegate.animationLastIndex = self.currentIndex
+        }
+    }
     // 총 이미지 개수
     public var numberOfItems: Int {
         get {
@@ -165,8 +173,13 @@ public class AnimationImage : NSObject, Collection {
         self.delegate = delegate
         // 종류 대입
         self.type = type
+        // 마지막 인덱스가 있는 경우, currentIndex를 lastIndex로 변경
+        if let lastIndex = self.delegate?.animationLastIndex {
+            self.currentIndex = lastIndex
+        }
     }
     // URL + Delegate로 초기화 실행
+    // 마지막 frame의 index도 설정 가능
     public convenience init?(from url: URL, type: AnimationImage.type, with delegate: AnimationImageDelegate) {
         // 종류별로 image를 초기화
         switch type {
@@ -191,7 +204,7 @@ public class AnimationImage : NSObject, Collection {
         }
     }
     // Data + Delegate로 초기화 실행
-    public convenience init?(from data: Data, type: AnimationImage.type,  with delegate: AnimationImageDelegate) {
+    public convenience init?(from data: Data, type: AnimationImage.type, with delegate: AnimationImageDelegate) {
         // 종류별로 image를 초기화
         switch type {
         case .gif:
@@ -304,6 +317,7 @@ public class AnimationImage : NSObject, Collection {
     }
     
     // MARK: Methods
+
     // 특정 index의 delay : 외부 접근 메쏘드
     // delay가 delay 딕셔너리에 없을 땐 가져온 뒤 딕셔너리에 반환
     public func delay(at index: Int)-> Float {
