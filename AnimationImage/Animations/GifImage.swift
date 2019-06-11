@@ -66,4 +66,16 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
     }
 
     // MARK: Method
+    // 특정 인덱스의 Delay를 반환
+    func delayTime(at index: Int) -> Float {
+        // delayTime을 NSNumber로 가져온다. 실패시 0.1초 반환
+        guard let delayTime = (self.dictionaryValue(at: index, key: kCGImagePropertyGIFDelayTime) as? NSNumber)?.floatValue else { return 0.1 }
+        // unclamped Delay Time이 있는지 확인
+        if let unclampeedDelayTime = (self.dictionaryValue(at: index, key: kCGImagePropertyGIFUnclampedDelayTime) as? NSNumber)?.floatValue {
+            if unclampeedDelayTime < delayTime {
+                return unclampeedDelayTime
+            }
+        }
+        return delayTime
+    }
 }

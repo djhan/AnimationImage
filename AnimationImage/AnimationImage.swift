@@ -64,15 +64,51 @@ public class AnimationImage : NSObject, Collection {
     // collection 프로토콜용 메쏘드 및 프로퍼티 종료
 
     // 기본 캐쉬
-    private lazy var originalCache = NSCache<NSNumber, NSImage>()
+    private lazy var originalCache          = NSCache<NSNumber, NSImage>()
     // 변형 전용 캐쉬
-    private lazy var transformationCache = NSCache<NSNumber, NSImage>()
+    private lazy var transformationCache    = NSCache<NSNumber, NSImage>()
+    // 각 프레임 별 지연 시간(duration) 저장 딕셔너리
+    private lazy var delays                 = [Int: Float]()
 
     // 현재 인덱스
     public var currentIndex = 0
     // 총 이미지 개수
     public var numberOfItems: Int {
         get {
+            var count: Int?
+            switch self.type {
+            case .gif:
+                count = self.gifImage?.count
+            case .png:
+                count = self.pngImage?.count
+            case .webp:
+                count = self.webpImage?.count
+            default:
+                return 0
+            }
+            // count가 nil이 아닌 경우, 강제 옵셔널 벗기기로 반환
+            if count != nil { return count! }
+            // 실패시 0 반환
+            return 0
+        }
+    }
+    // 총 루프 횟수
+    public var loopCount: UInt {
+        get {
+            var loopCount: UInt?
+            switch self.type {
+            case .gif:
+                loopCount = self.gifImage?.loopCount
+            case .png:
+                loopCount = self.pngImage?.loopCount
+            case .webp:
+                loopCount = self.webpImage?.loopCount
+            default:
+                return 0
+            }
+            // loopCount가 nil이 아닌 경우, 강제 옵셔널 벗기기로 반환
+            if loopCount != nil { return loopCount! }
+            // 실패시 0 반환
             return 0
         }
     }
@@ -112,9 +148,7 @@ public class AnimationImage : NSObject, Collection {
     }
     // 현재 이미지 - 현재 인덱스의 이미지 반환
     public var currentImage: NSImage? {
-        get {
-            return self[self.currentIndex]
-        }
+        get { return self[self.currentIndex] }
     }
     
     // delegate
@@ -267,5 +301,39 @@ public class AnimationImage : NSObject, Collection {
         case .transformation:
             self.transformationCache.removeAllObjects()
         }
+    }
+    
+    // MARK: Methods
+    // 특정 index의 delay : 외부 접근 메쏘드
+    // delay가 delay 딕셔너리에 없을 땐 가져온 뒤 딕셔너리에 반환
+    public func delay(at index: Int)-> Float {
+        if let delay = self.delays[index] {
+            return delay
+        }
+        else {
+            let delay = self.getDelay(at: index)
+            // delays에 해당 인덱스의 delay 추가
+            self.delays[index] = delay
+            return delay
+        }
+    }
+    
+    // 특정 index의 delay를 가져온다
+    private func getDelay(at index: Int)-> Float {
+        var delay: Float?
+        switch self.type {
+        case .gif:
+            delay = self.gifImage?.delayTime(at: index)
+        case .png:
+            delay = self.pngImage?.delayTime(at: index)
+        case .webp:
+            delay = self.webpImage?.delayTime(at: index)
+        default:
+            return 0.1
+        }
+        // delay가 nil이 아닌 경우 강제 옵셔널 벗기기로 반환
+        if delay != nil { return delay! }
+        // 이외는 0.1을 반환
+        return 0.1
     }
 }

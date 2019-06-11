@@ -26,6 +26,8 @@ public protocol AnimationConvertible: Collection {
     var isAnimation: Bool { get }
     // 루프 횟수
     var loopCount: UInt { get set }
+    // 특정 인덱스의 delay(duration)
+    func delayTime(at index: Index)-> Float
 }
 
 // MARK: Animation Convertible Extension

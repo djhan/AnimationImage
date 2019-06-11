@@ -64,5 +64,10 @@ class WebpExImage: DefaultAnimationImage, AnimationConvertible {
     }
     
     // MARK: Method
-
+    // 특정 인덱스의 Delay를 반환
+    func delayTime(at index: Int) -> Float {
+        // delayTime을 NSNumber로 가져온다. 실패시 0.1초 반환
+        guard let delayTime = self.imageSource?.duration(at: index) else { return 0.1 }
+        return delayTime
+    }
 }
