@@ -1,5 +1,0 @@
-framework module AnimationImagePrivate {
-    header "../../WebpFramework.framework/Headers/WebpFramework.h"
-    export *
-    module * { export * }
-}
