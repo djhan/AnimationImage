@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		EE1A8EAE22A676CD00969F22 /* WebpFramework_umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */; };
+		EE23CAFA22B520E6001FE0A7 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE23CAF922B520E6001FE0A7 /* Synchronized.swift */; };
 		EE394D2F22A6969200198FDB /* GifImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE394D2E22A6969200198FDB /* GifImage.swift */; };
 		EE394D3122A6969D00198FDB /* PngImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE394D3022A6969D00198FDB /* PngImage.swift */; };
 		EE5FA62622A52409006FD036 /* WebpFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE5FA62522A52409006FD036 /* WebpFramework.framework */; };
@@ -32,6 +33,7 @@
 /* Begin PBXFileReference section */
 		EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebpFramework_umbrella.h; sourceTree = "<group>"; };
 		EE1A8EAF22A6777800969F22 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		EE23CAF922B520E6001FE0A7 /* Synchronized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Synchronized.swift; sourceTree = "<group>"; };
 		EE394D2E22A6969200198FDB /* GifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImage.swift; sourceTree = "<group>"; };
 		EE394D3022A6969D00198FDB /* PngImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PngImage.swift; sourceTree = "<group>"; };
 		EE5FA62522A52409006FD036 /* WebpFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WebpFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +114,7 @@
 				EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */,
 				EEBEE67522A4055D009CF602 /* AnimationImage.h */,
 				EEBEE68C22A40625009CF602 /* AnimationImage.swift */,
+				EE23CAF922B520E6001FE0A7 /* Synchronized.swift */,
 				EEBEE67622A4055D009CF602 /* Info.plist */,
 			);
 			path = AnimationImage;
@@ -241,6 +244,7 @@
 				EE8F24B122A7351300F9E0BA /* AnimationConvertible.swift in Sources */,
 				EE8F24B722A74BBC00F9E0BA /* WebpExImage.swift in Sources */,
 				EEBEE68D22A40625009CF602 /* AnimationImage.swift in Sources */,
+				EE23CAFA22B520E6001FE0A7 /* Synchronized.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

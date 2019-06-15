@@ -15,7 +15,7 @@ import AnimationImagePrivate
 //==============================================================//
 public protocol AnimationImageDelegate: class {
     // 변형 적용 여부
-    var isTransformation: Bool { get }
+    var isEffect: Bool { get }
     // 애니메이션 이미지의 Last Frame Index
     var animationLastIndex: Int? { get set }
 }
@@ -45,8 +45,8 @@ public class AnimationImage : NSObject, Collection {
     public enum cache {
         // original
         case original
-        // transformation
-        case transformation
+        // effect
+        case effect
     }
 
     // MARK: Collection Protocol Related
@@ -66,9 +66,9 @@ public class AnimationImage : NSObject, Collection {
     // collection 프로토콜용 메쏘드 및 프로퍼티 종료
 
     // 기본 캐쉬
-    private lazy var originalCache          = NSCache<NSNumber, NSImage>()
+    private lazy var originalCache  = NSCache<NSNumber, NSImage>()
     // 변형 전용 캐쉬
-    private lazy var transformationCache    = NSCache<NSNumber, NSImage>()
+    private lazy var effectCache    = NSCache<NSNumber, NSImage>()
     // 각 프레임 별 지연 시간(duration) 저장 딕셔너리
     private lazy var delays                 = [Int: Float]()
 
@@ -158,7 +158,21 @@ public class AnimationImage : NSObject, Collection {
     public var currentImage: NSImage? {
         get { return self[self.currentIndex] }
     }
-    
+    // 최초 오리지날 이미지 반환: 여백 제거 등에 사용
+    public var firstOriginalImage: NSImage? {
+        get {
+            return synchronized(self) { [unowned self] () -> NSImage? in
+                // 최초 이미지를 가져온다
+                var image = self.originalCache.object(forKey: NSNumber.init(value: 0))
+                // 없을 경우, 새로 생성해 가져온다
+                if image == nil {
+                    image = self.makeImage(from: 0, at: .original)
+                }
+                return image
+            }
+        }
+    }
+
     // delegate
     weak var delegate: AnimationImageDelegate?
     
@@ -232,29 +246,31 @@ public class AnimationImage : NSObject, Collection {
     // MARK: Method
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용시에도 중요
     public subscript(index: Int)-> NSImage? {
-        // 델리게이트로부터 변형 여부를 가져온다
-        // 델리게이트가 nil인 경우, nil 반환
-        guard let isTransformation = delegate?.isTransformation else { return nil }
-        // 반환용 이미지
-        var image: NSImage?
-        // 검색용 Cache 종류
-        let target: AnimationImage.cache = isTransformation == false ? .original : .transformation
-        
-        // 캐쉬에서 이미지를 가져온다
-        switch target {
-        case .original:
-            image = self.originalCache.object(forKey: NSNumber.init(value: index))
-        case .transformation:
-            image = self.transformationCache.object(forKey: NSNumber.init(value: index))
-        }
-        // 캐쉬에서 이미지를 가져왔는지 여부를 확인
-        if image != nil {
-            // 성공시 반환
-            return image
-        }
-            // 캐쉬 미작성시, 생성후 반환
-        else {
-            return self.makeImage(from: index, at: target)
+        return synchronized(self) { [unowned self] () -> NSImage? in
+            // 델리게이트로부터 변형 여부를 가져온다
+            // 델리게이트가 nil인 경우, nil 반환
+            guard let isEffect = delegate?.isEffect else { return nil }
+            // 반환용 이미지
+            var image: NSImage?
+            // 검색용 Cache 종류
+            let target: AnimationImage.cache = isEffect == false ? .original : .effect
+            
+            // 캐쉬에서 이미지를 가져온다
+            switch target {
+            case .original:
+                image = self.originalCache.object(forKey: NSNumber.init(value: index))
+            case .effect:
+                image = self.effectCache.object(forKey: NSNumber.init(value: index))
+            }
+            // 캐쉬에서 이미지를 가져왔는지 여부를 확인
+            if image != nil {
+                // 성공시 반환
+                return image
+            }
+                // 캐쉬 미작성시, 생성후 반환
+            else {
+                return self.makeImage(from: index, at: target)
+            }
         }
     }
     // 이미지 생성후 캐쉬에 저장
@@ -280,7 +296,7 @@ public class AnimationImage : NSObject, Collection {
             switch cache {
             case .original:
                 self.originalCache.setObject(image!, forKey: NSNumber.init(value: index))
-            case .transformation:
+            case .effect:
                 // 오리지날 캐쉬에서 이미지를 가져온다
                 //
                 //
@@ -293,7 +309,7 @@ public class AnimationImage : NSObject, Collection {
                 //
                 //
                 //
-                self.transformationCache.setObject(image!, forKey: NSNumber.init(value: index))
+                self.effectCache.setObject(image!, forKey: NSNumber.init(value: index))
             }
             
             // 반환
@@ -307,15 +323,17 @@ public class AnimationImage : NSObject, Collection {
     // 전체 제거
     public func clearAllCaches()-> Void {
         self.clearCache(at: .original)
-        self.clearCache(at: .transformation)
+        self.clearCache(at: .effect)
     }
     // 특정 캐쉬 제거
     public func clearCache(at cache: AnimationImage.cache)-> Void {
-        switch cache {
-        case .original:
-            self.originalCache.removeAllObjects()
-        case .transformation:
-            self.transformationCache.removeAllObjects()
+        synchronized(self) { [unowned self] in
+            switch cache {
+            case .original:
+                self.originalCache.removeAllObjects()
+            case .effect:
+                self.effectCache.removeAllObjects()
+            }
         }
     }
     

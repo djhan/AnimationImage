@@ -112,31 +112,30 @@ extension AnimationConvertible {
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
     public subscript(index: Int)-> NSImage? {
         // 동시성 확보를 위해, 싱크 처리 : Synchronized 익스텐션에 사용되는 것과 동일
-        objc_sync_enter(self)
-        defer { objc_sync_exit(self) }
-
-        if index < self.frameCount {
-            var cgImage: CGImage?
-            // webp 인 경우
-            if self.type == .webp {
-                guard let webpImage = self.imageSource as? WebpImage else { return nil }
-                // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
-                // new로 생성된 것이 아니기 때문에, unretained로 처리
-                cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
+        return synchronized(self) { () -> NSImage? in
+            if index < self.frameCount {
+                var cgImage: CGImage?
+                // webp 인 경우
+                if self.type == .webp {
+                    guard let webpImage = self.imageSource as? WebpImage else { return nil }
+                    // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
+                    // new로 생성된 것이 아니기 때문에, unretained로 처리
+                    cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
+                }
+                    // GIF/PNG 인 경우
+                else if self.type == .gif || self.type == .png {
+                    guard let imageSource = self.castedCGImageSource else { return nil }
+                    cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
+                }
+                // cgImage를 정상적으로 받은 경우
+                if cgImage != nil {
+                    let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
+                    return NSImage.init(cgImage: cgImage!, size: size)
+                }
             }
-                // GIF/PNG 인 경우
-            else if self.type == .gif || self.type == .png {
-                guard let imageSource = self.castedCGImageSource else { return nil }
-                cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
-            }
-            // cgImage를 정상적으로 받은 경우
-            if cgImage != nil {
-                let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
-                return NSImage.init(cgImage: cgImage!, size: size)
-            }
+            // 이외의 경우, NIL 반환
+            return nil
         }
-        // 이외의 경우, NIL 반환
-        return nil
     }
 }
 
