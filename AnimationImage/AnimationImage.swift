@@ -154,22 +154,26 @@ public class AnimationImage : NSObject, Collection {
             else { return false }
         }
     }
-    // 현재 이미지 - 현재 인덱스의 이미지 반환
+    // 현재 이미지 - 현재 인덱스의 이미지 반환: Original / Effect 여부는 자동 판별
     public var currentImage: NSImage? {
         get { return self[self.currentIndex] }
+    }
+    // 현재 오리지날 이미지 - 현재 인덱스의 오리지날 이미지 반환
+    public var currentOriginalImage: NSImage? {
+        get {
+            return self.image(at: self.currentIndex, from: .original)
+        }
+    }
+    // 현재 특수효과 이미지 - 현재 인덱스의 특수효과 이미지 반환
+    public var currentEffectImage: NSImage? {
+        get {
+            return self.image(at: self.currentIndex, from: .effect)
+        }
     }
     // 최초 오리지날 이미지 반환: 여백 제거 등에 사용
     public var firstOriginalImage: NSImage? {
         get {
-            return synchronized(self) { [unowned self] () -> NSImage? in
-                // 최초 이미지를 가져온다
-                var image = self.originalCache.object(forKey: NSNumber.init(value: 0))
-                // 없을 경우, 새로 생성해 가져온다
-                if image == nil {
-                    image = self.makeImage(from: 0, at: .original)
-                }
-                return image
-            }
+            return self.image(at: 0, from: .original)
         }
     }
 
@@ -250,29 +254,35 @@ public class AnimationImage : NSObject, Collection {
             // 델리게이트로부터 변형 여부를 가져온다
             // 델리게이트가 nil인 경우, nil 반환
             guard let isEffect = delegate?.isEffect else { return nil }
-            // 반환용 이미지
-            var image: NSImage?
             // 검색용 Cache 종류
             let target: AnimationImage.cache = isEffect == false ? .original : .effect
-            
-            // 캐쉬에서 이미지를 가져온다
-            switch target {
-            case .original:
-                image = self.originalCache.object(forKey: NSNumber.init(value: index))
-            case .effect:
-                image = self.effectCache.object(forKey: NSNumber.init(value: index))
-            }
-            // 캐쉬에서 이미지를 가져왔는지 여부를 확인
-            if image != nil {
-                // 성공시 반환
-                return image
-            }
-                // 캐쉬 미작성시, 생성후 반환
-            else {
-                return self.makeImage(from: index, at: target)
-            }
+            // 해당 Cache의 해당 index 이미지를 반환
+            return self.image(at: index, from: target)
         }
     }
+    // 특정 인덱스의 특정 캐쉬의 이미지를 반환
+    private func image(at index: Int, from target: AnimationImage.cache)-> NSImage? {
+        // 반환용 이미지
+        var image: NSImage?
+        
+        // 캐쉬에서 이미지를 가져온다
+        switch target {
+        case .original:
+            image = self.originalCache.object(forKey: NSNumber.init(value: index))
+        case .effect:
+            image = self.effectCache.object(forKey: NSNumber.init(value: index))
+        }
+        // 캐쉬에서 이미지를 가져왔는지 여부를 확인
+        if image != nil {
+            // 성공시 반환
+            return image
+        }
+            // 캐쉬 미작성시, 생성후 반환
+        else {
+            return self.makeImage(from: index, at: target)
+        }
+    }
+    
     // 이미지 생성후 캐쉬에 저장
     private func makeImage(from index: Int, at cache: AnimationImage.cache)-> NSImage? {
         // 반환용 이미지
