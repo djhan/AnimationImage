@@ -127,22 +127,13 @@ public class AnimationImage : NSObject, Collection {
     private var type: AnimationImage.type = .unknown
     // 종류별로 다운캐스팅된 이미지 소스
     private var gifImage: GifImage? {
-        get {
-            guard let image = self.image else { return nil }
-            return image as? GifImage
-        }
+        get { return image as? GifImage }
     }
     private var pngImage: PngImage? {
-        get {
-            guard let image = self.image else { return nil }
-            return image as? PngImage
-        }
+        get { return image as? PngImage }
     }
     private var webpImage: WebpExImage? {
-        get {
-            guard let image = self.image else { return nil }
-            return image as? WebpExImage
-        }
+        get { return image as? WebpExImage }
     }
     
     // 애니메이션 이미지 여부
