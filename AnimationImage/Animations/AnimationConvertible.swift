@@ -64,35 +64,31 @@ extension AnimationConvertible {
     
     // 애니메이션 여부
     public var isAnimation: Bool {
-        get {
-            // 프레임 갯수가 1개 이상일 때, True 반환
-            if self.frameCount > 1 { return true }
-            return false
-        }
+        // 프레임 갯수가 1개 이상일 때, True 반환
+        if self.frameCount > 1 { return true }
+        return false
     }
     // 프레임 갯수
     public var frameCount: Int {
-        get {
-            // webp 인 경우
-            if self.type == .webp {
-                // imageSource가 없을 떄는 0 반환
-                guard let webpImage = self.imageSource as? WebpImage else {
-                    return 0
-                }
-                return Int(webpImage.frameCount)
-
+        // webp 인 경우
+        if self.type == .webp {
+            // imageSource가 없을 떄는 0 반환
+            guard let webpImage = self.imageSource as? WebpImage else {
+                return 0
             }
-                // GIF/PNG 인 경우
-            else if self.type == .gif || self.type == .png {
-                // imageSource가 없을 떄는 0 반환
-                guard let imageSource = self.castedCGImageSource else {
-                    return 0
-                }
-                return CGImageSourceGetCount(imageSource)
-            }
-            // 그 외의 경우
-            return 0
+            return Int(webpImage.frameCount)
+            
         }
+            // GIF/PNG 인 경우
+        else if self.type == .gif || self.type == .png {
+            // imageSource가 없을 떄는 0 반환
+            guard let imageSource = self.castedCGImageSource else {
+                return 0
+            }
+            return CGImageSourceGetCount(imageSource)
+        }
+        // 그 외의 경우
+        return 0
     }
 
     // MARK: Collection Protocol Related
@@ -101,13 +97,11 @@ extension AnimationConvertible {
         return i+1
     }
     public var startIndex: Int {
-        get { return 0 }
+        return 0
     }
     public var endIndex: Int {
-        get {
-            // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, frameCount를 반환하면 된다!
-            return self.frameCount
-        }
+        // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, frameCount를 반환하면 된다!
+        return self.frameCount
     }
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
     public subscript(index: Int)-> NSImage? {
