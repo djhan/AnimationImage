@@ -24,11 +24,9 @@ public protocol AnimationImageDelegate: class {
 //==============================================================//
 //
 // Animation Image Class
-// 미완성 부분: subscript에서 이미지 반환시 additinoalImage를 생성하는 부분
-//
 //
 //==============================================================//
-public class AnimationImage : NSObject, Collection {
+public class AnimationImage : NSObject {
     // MARK: AnimationImage Enumerations
     // 종류
     public enum type {
@@ -49,22 +47,6 @@ public class AnimationImage : NSObject, Collection {
         case effect
     }
 
-    // MARK: Collection Protocol Related
-    // collection 프로토콜용 메쏘드 및 프로퍼티
-    public func index(after i: Int) -> Int {
-        return i + 1
-    }
-    public var startIndex: Int {
-        get { return 0 }
-    }
-    public var endIndex: Int {
-        get {
-            // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, numberOfItems를 반환하면 된다!
-            return self.numberOfItems
-        }
-    }
-    // collection 프로토콜용 메쏘드 및 프로퍼티 종료
-
     // 기본 캐쉬
     private lazy var originalCache  = NSCache<NSNumber, NSImage>()
     // 변형 전용 캐쉬
@@ -82,43 +64,39 @@ public class AnimationImage : NSObject, Collection {
     }
     // 총 이미지 개수
     public var numberOfItems: Int {
-        get {
-            var count: Int?
-            switch self.type {
-            case .gif:
-                count = self.gifImage?.count
-            case .png:
-                count = self.pngImage?.count
-            case .webp:
-                count = self.webpImage?.count
-            default:
-                return 0
-            }
-            // count가 nil이 아닌 경우, 강제 옵셔널 벗기기로 반환
-            if count != nil { return count! }
-            // 실패시 0 반환
+        var count: Int?
+        switch self.type {
+        case .gif:
+            count = self.gifImage?.count
+        case .png:
+            count = self.pngImage?.count
+        case .webp:
+            count = self.webpImage?.count
+        default:
             return 0
         }
+        // count가 nil이 아닌 경우, 강제 옵셔널 벗기기로 반환
+        if count != nil { return count! }
+        // 실패시 0 반환
+        return 0
     }
     // 총 루프 횟수
     public var loopCount: UInt {
-        get {
-            var loopCount: UInt?
-            switch self.type {
-            case .gif:
-                loopCount = self.gifImage?.loopCount
-            case .png:
-                loopCount = self.pngImage?.loopCount
-            case .webp:
-                loopCount = self.webpImage?.loopCount
-            default:
-                return 0
-            }
-            // loopCount가 nil이 아닌 경우, 강제 옵셔널 벗기기로 반환
-            if loopCount != nil { return loopCount! }
-            // 실패시 0 반환
+        var loopCount: UInt?
+        switch self.type {
+        case .gif:
+            loopCount = self.gifImage?.loopCount
+        case .png:
+            loopCount = self.pngImage?.loopCount
+        case .webp:
+            loopCount = self.webpImage?.loopCount
+        default:
             return 0
         }
+        // loopCount가 nil이 아닌 경우, 강제 옵셔널 벗기기로 반환
+        if loopCount != nil { return loopCount! }
+        // 실패시 0 반환
+        return 0
     }
 
     // 이미지 소스
@@ -127,45 +105,42 @@ public class AnimationImage : NSObject, Collection {
     private var type: AnimationImage.type = .unknown
     // 종류별로 다운캐스팅된 이미지 소스
     private var gifImage: GifImage? {
-        get { return image as? GifImage }
+        return image as? GifImage
     }
     private var pngImage: PngImage? {
-        get { return image as? PngImage }
+        return image as? PngImage
     }
     private var webpImage: WebpExImage? {
-        get { return image as? WebpExImage }
+        return image as? WebpExImage
     }
     
     // 애니메이션 이미지 여부
     public var isAnimation: Bool {
-        get {
-            // 이미지 개수가 1개 이상인 경우 true 반환
-            if self.numberOfItems > 1 { return true }
-                // 아닌 경우, false 반환
-            else { return false }
-        }
+        // 이미지 개수가 1개 이상인 경우 true 반환
+        if self.numberOfItems > 1 { return true }
+            // 아닌 경우, false 반환
+        else { return false }
     }
     // 현재 이미지 - 현재 인덱스의 이미지 반환: Original / Effect 여부는 자동 판별
     public var currentImage: NSImage? {
-        get { return self[self.currentIndex] }
+        return self[self.currentIndex]
     }
     // 현재 오리지날 이미지 - 현재 인덱스의 오리지날 이미지 반환
     public var currentOriginalImage: NSImage? {
-        get {
-            return self.image(at: self.currentIndex, from: .original)
-        }
+        return self.image(at: self.currentIndex, from: .original)
     }
     // 현재 특수효과 이미지 - 현재 인덱스의 특수효과 이미지 반환
     public var currentEffectImage: NSImage? {
-        get {
-            return self.image(at: self.currentIndex, from: .effect)
-        }
+        return self.image(at: self.currentIndex, from: .effect)
     }
     // 최초 오리지날 이미지 반환: 여백 제거 등에 사용
     public var firstOriginalImage: NSImage? {
-        get {
-            return self.image(at: 0, from: .original)
-        }
+        return self.image(at: 0, from: .original)
+    }
+    // Pixel Size
+    public var pixelSize: NSSize {
+        guard let firstImage = self.firstOriginalImage else { return NSZeroSize }
+        return firstImage.size
     }
 
     // delegate
@@ -239,18 +214,6 @@ public class AnimationImage : NSObject, Collection {
     }
 
     // MARK: Method
-    // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용시에도 중요
-    public subscript(index: Int)-> NSImage? {
-        return synchronized(self) { [unowned self] () -> NSImage? in
-            // 델리게이트로부터 변형 여부를 가져온다
-            // 델리게이트가 nil인 경우, nil 반환
-            guard let isEffect = delegate?.isEffect else { return nil }
-            // 검색용 Cache 종류
-            let target: AnimationImage.cache = isEffect == false ? .original : .effect
-            // 해당 Cache의 해당 index 이미지를 반환
-            return self.image(at: index, from: target)
-        }
-    }
     // 특정 인덱스의 특정 캐쉬의 이미지를 반환
     private func image(at index: Int, from target: AnimationImage.cache)-> NSImage? {
         // 반환용 이미지
@@ -372,4 +335,35 @@ public class AnimationImage : NSObject, Collection {
         // 이외는 0.1을 반환
         return 0.1
     }
+}
+
+
+// MARK: - AnimationImage Extension for Collection
+// Collection 프로토콜에 대응하기 위한 확장
+extension AnimationImage: Collection {
+    // MARK: Collection Protocol Related
+    // collection 프로토콜용 메쏘드 및 프로퍼티
+    public func index(after i: Int) -> Int {
+        return i + 1
+    }
+    public var startIndex: Int {
+        return 0
+    }
+    public var endIndex: Int {
+        // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, numberOfItems를 반환하면 된다!
+        return self.numberOfItems
+    }
+    // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용시에도 중요
+    public subscript(index: Int)-> NSImage? {
+        return synchronized(self) { [unowned self] () -> NSImage? in
+            // 델리게이트로부터 변형 여부를 가져온다
+            // 델리게이트가 nil인 경우, nil 반환
+            guard let isEffect = delegate?.isEffect else { return nil }
+            // 검색용 Cache 종류
+            let target: AnimationImage.cache = isEffect == false ? .original : .effect
+            // 해당 Cache의 해당 index 이미지를 반환
+            return self.image(at: index, from: target)
+        }
+    }
+    // collection 프로토콜용 메쏘드 및 프로퍼티 종료
 }
