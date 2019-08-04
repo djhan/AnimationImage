@@ -275,8 +275,8 @@ public class AnimationImage : NSObject {
         return nil
     }
     
-    // 특정 이미지 배열을 특수효과 이미지 캐쉬에 세팅
-    public func setEffecImages(from images: [NSImage]) -> Bool {
+    // 특정 이미지 배열을 특수효과 이미지 캐쉬에 추가
+    public func addEffecImages(from images: [NSImage]) -> Bool {
         if images.count != self.numberOfItems {
             print("AnimationImage>setEffecImages: \(images.count) 와 \(self.numberOfItems) 개수가 불일치, 실패!")
             return false
