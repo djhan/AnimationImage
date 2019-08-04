@@ -127,11 +127,11 @@ public class AnimationImage : NSObject {
     }
     // 현재 오리지날 이미지 - 현재 인덱스의 오리지날 이미지 반환
     public var currentOriginalImage: NSImage? {
-        return self.image(at: self.currentIndex, from: .original)
+        return self.originalImage(at: self.currentIndex)
     }
     // 현재 특수효과 이미지 - 현재 인덱스의 특수효과 이미지 반환
     public var currentEffectImage: NSImage? {
-        return self.image(at: self.currentIndex, from: .effect)
+        return self.effectImage(at: self.currentIndex)
     }
     // 최초 오리지날 이미지 반환: 여백 제거 등에 사용
     public var firstOriginalImage: NSImage? {
@@ -214,8 +214,17 @@ public class AnimationImage : NSObject {
     }
 
     // MARK: Method
+    // 특정 인덱스의 오리지날 이미지를 반환
+    public func originalImage(at index: Int) -> NSImage? {
+        return self.image(at: index, from: .original)
+    }
+    // 특정 인덱스의 특수효과 이미지를 반환
+    public func effectImage(at index: Int) -> NSImage? {
+        return self.image(at: index, from: .effect)
+    }
+
     // 특정 인덱스의 특정 캐쉬의 이미지를 반환
-    private func image(at index: Int, from target: AnimationImage.cache)-> NSImage? {
+    private func image(at index: Int, from target: AnimationImage.cache) -> NSImage? {
         // 반환용 이미지
         var image: NSImage?
         
