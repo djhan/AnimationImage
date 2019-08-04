@@ -240,14 +240,14 @@ public class AnimationImage : NSObject {
             // 성공시 반환
             return image
         }
-            // 캐쉬 미작성시, 생성후 반환
+            // 캐쉬 미작성시, 오리지날 캐쉬를 생성한 다음 반환
         else {
-            return self.makeImage(from: index, at: target)
+            return self.makeImage(from: index)
         }
     }
     
-    // 이미지 생성후 캐쉬에 저장
-    private func makeImage(from index: Int, at cache: AnimationImage.cache)-> NSImage? {
+    // 오리지날 이미지 생성후 캐쉬에 저장
+    private func makeImage(from index: Int) -> NSImage? {
         // 반환용 이미지
         var image: NSImage?
         switch self.type {
@@ -266,30 +266,27 @@ public class AnimationImage : NSObject {
         // 이미지를 가져오는 데 성공한 경우
         if image != nil {
             // 캐쉬에 저장
-            switch cache {
-            case .original:
-                self.originalCache.setObject(image!, forKey: NSNumber.init(value: index))
-            case .effect:
-                // 오리지날 캐쉬에서 이미지를 가져온다
-                //
-                //
-                //
-                //
-                //
-                // 가져온 원본 이미지 (image)를 기반으로
-                // 이미지 변형 처리 필요
-                //
-                //
-                //
-                //
-                self.effectCache.setObject(image!, forKey: NSNumber.init(value: index))
-            }
+            self.originalCache.setObject(image!, forKey: NSNumber.init(value: index))
             
             // 반환
             return image
         }
         // 그 외의 경우 NIL 반환
         return nil
+    }
+    
+    // 특정 이미지 배열을 특수효과 이미지 캐쉬에 세팅
+    public func setEffecImages(from images: [NSImage]) -> Bool {
+        if images.count != self.numberOfItems {
+            print("AnimationImage>setEffecImages: \(images.count) 와 \(self.numberOfItems) 개수가 불일치, 실패!")
+            return false
+        }
+        for index in 0 ..< images.count {
+            let image = images[index]
+            // 특수효과 캐쉬에 저장
+            self.effectCache.setObject(image, forKey: NSNumber.init(value: index))
+        }
+        return true
     }
     
     // MARK: Manage Cache
