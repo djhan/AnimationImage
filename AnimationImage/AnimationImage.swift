@@ -114,6 +114,9 @@ public class AnimationImage : NSObject {
         return image as? WebpExImage
     }
     
+    // 특수효과 이미지 존재 여부
+    public var hasEffectImages: Bool = false
+    
     // 애니메이션 이미지 여부
     public var isAnimation: Bool {
         // 이미지 개수가 1개 이상인 경우 true 반환
@@ -281,12 +284,17 @@ public class AnimationImage : NSObject {
             print("AnimationImage>setEffecImages: \(images.count) 와 \(self.numberOfItems) 개수가 불일치, 실패!")
             return false
         }
-        for index in 0 ..< images.count {
-            let image = images[index]
-            // 특수효과 캐쉬에 저장
-            self.effectCache.setObject(image, forKey: NSNumber.init(value: index))
+        // 동기화 처리
+        return synchronized(self) { [unowned self] in
+            for index in 0 ..< images.count {
+                let image = images[index]
+                // 특수효과 캐쉬에 저장
+                self.effectCache.setObject(image, forKey: NSNumber.init(value: index))
+            }
+            // 특수효과 존재 여부 = YES
+            self.hasEffectImages = true
+            return true
         }
-        return true
     }
     
     // MARK: Manage Cache
@@ -297,12 +305,15 @@ public class AnimationImage : NSObject {
     }
     // 특정 캐쉬 제거
     public func clearCache(at cache: AnimationImage.cache)-> Void {
+        // 동기화 처리
         synchronized(self) { [unowned self] in
             switch cache {
             case .original:
                 self.originalCache.removeAllObjects()
             case .effect:
                 self.effectCache.removeAllObjects()
+                // 특수효과 존재 여부 = NO
+                self.hasEffectImages = false
             }
         }
     }
