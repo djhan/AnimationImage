@@ -20,13 +20,13 @@ public protocol AnimationImageDelegate: class {
     var animationLastIndex: Int? { get set }
 }
 
-// MARK: -AnimationImage Class
+// MARK: - AnimationImage Class
 //==============================================================//
 //
 // Animation Image Class
 //
 //==============================================================//
-public class AnimationImage : NSObject {
+public class AnimationImage {
     // MARK: AnimationImage Enumerations
     // 종류
     public enum type {
@@ -155,7 +155,6 @@ public class AnimationImage : NSObject {
 
     // MARK: Initialization
     init(with delegate: AnimationImageDelegate, type: AnimationImage.type) {
-        super.init()
         // delegate 대입
         self.delegate = delegate
         // 종류 대입

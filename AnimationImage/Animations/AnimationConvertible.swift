@@ -134,11 +134,9 @@ extension AnimationConvertible {
 }
 
 // MARK: - Default Animation Image Class for Identification
-public class DefaultAnimationImage: NSObject {
-    // Dummy Class
-    override init() {
-        super.init()
-    }
+public class DefaultAnimationImage {
+    // Dummy Class로 선언됨
+    
     // type
     var type: AnimationImage.type = .unknown
     // 크기: NSZeroSize로 초기화
