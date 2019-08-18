@@ -353,9 +353,23 @@ public class AnimationImage {
     }
     
     // Landscape 여부 판단 : landscapeRatio에 의거하여 판단
-    func isLandscape(landscapeRatio: CGFloat) -> Bool {
-        // 폭/ 높이 ratio 가 landscapeRatio 를 능가하는 경우, true 반환
-        if self.pixelSize.width / self.pixelSize.height > landscapeRatio { return true }
+    public func isLandscape(by landscapeRatio: CGFloat, orientation: CGImagePropertyOrientation) -> Bool {
+        // 현재 픽셀 사이즈가 제로 사이즈일 경우, false 반환
+        if NSEqualSizes(self.pixelSize, NSZeroSize) { return false }
+        
+        var ratio: CGFloat = 1.0
+        // 좌우 회전시
+        if orientation == .left ||
+            orientation == .leftMirrored ||
+            orientation == .right ||
+            orientation == .rightMirrored {
+            ratio = self.pixelSize.height / self.pixelSize.width
+        }
+        else {
+            ratio = self.pixelSize.width / self.pixelSize.height
+        }
+        // ratio 가 landscapeRatio 를 능가하는 경우, true 반환
+        if ratio > landscapeRatio { return true }
         // 이외의 경우
         return false
     }
