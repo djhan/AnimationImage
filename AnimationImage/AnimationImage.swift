@@ -351,6 +351,14 @@ public class AnimationImage {
         // 이외는 0.1을 반환
         return 0.1
     }
+    
+    // Landscape 여부 판단 : landscapeRatio에 의거하여 판단
+    func isLandscape(landscapeRatio: CGFloat) -> Bool {
+        // 폭/ 높이 ratio 가 landscapeRatio 를 능가하는 경우, true 반환
+        if self.pixelSize.width / self.pixelSize.height > landscapeRatio { return true }
+        // 이외의 경우
+        return false
+    }
 }
 
 
