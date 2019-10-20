@@ -11,7 +11,7 @@ import Cocoa
 import AnimationImagePrivate
 
 // MARK: Animation Convertible Protocol
-public protocol AnimationConvertible: Collection {
+public protocol AnimationConvertible: class, Collection {
     // 소스 연관 타입 설정
     associatedtype SourceType
     // 이미지 소스
@@ -106,19 +106,21 @@ extension AnimationConvertible {
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
     public subscript(index: Int)-> NSImage? {
         // 동시성 확보를 위해, 싱크 처리 : Synchronized 익스텐션에 사용되는 것과 동일
-        return synchronized(self) { () -> NSImage? in
-            if index < self.frameCount {
+        return synchronized(self) { [weak self] () -> NSImage? in
+            // self가 NIL인 경우, NIL 반환
+            guard let strongSelf = self else { return nil }
+            if index < strongSelf.frameCount {
                 var cgImage: CGImage?
                 // webp 인 경우
-                if self.type == .webp {
-                    guard let webpImage = self.imageSource as? WebpImage else { return nil }
+                if strongSelf.type == .webp {
+                    guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
                     // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
                     // new로 생성된 것이 아니기 때문에, unretained로 처리
                     cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
                 }
                     // GIF/PNG 인 경우
-                else if self.type == .gif || self.type == .png {
-                    guard let imageSource = self.castedCGImageSource else { return nil }
+                else if strongSelf.type == .gif || strongSelf.type == .png {
+                    guard let imageSource = strongSelf.castedCGImageSource else { return nil }
                     cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
                 }
                 // cgImage를 정상적으로 받은 경우
