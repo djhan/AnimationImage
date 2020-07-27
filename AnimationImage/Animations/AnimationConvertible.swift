@@ -17,6 +17,9 @@ public protocol AnimationConvertible: class, Collection {
     // 이미지 소스
     var imageSource: SourceType? { get }
     
+    // 싱크용 큐
+    var syncQueue: DispatchQueue { get }
+    
     // DefaultAnimationImage 클래스에서 선언
     // type
     var type: AnimationImage.type { get }
@@ -105,8 +108,9 @@ extension AnimationConvertible {
     }
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
     public subscript(index: Int)-> NSImage? {
-        // 동시성 확보를 위해, 싱크 처리 : Synchronized 익스텐션에 사용되는 것과 동일
-        return synchronized(self) { [weak self] () -> NSImage? in
+        // 동시성 확보를 위해, 싱크 처리
+        self.syncQueue.sync { [weak self] () -> NSImage? in
+
             // self가 NIL인 경우, NIL 반환
             guard let strongSelf = self else { return nil }
             if index < strongSelf.frameCount {

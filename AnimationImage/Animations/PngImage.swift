@@ -39,6 +39,9 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
     // 사용하지 않음
     internal var webpImage: WebpImage?
 
+    // 동기화 큐
+    lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.PngImage", attributes: .concurrent)
+
     // MARK: Initialization
     // 초기화
     init(from imageSource: CGImageSource) {

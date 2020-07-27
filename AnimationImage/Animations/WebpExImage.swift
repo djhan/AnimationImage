@@ -38,6 +38,9 @@ class WebpExImage: DefaultAnimationImage, AnimationConvertible {
     // 사용하지 않음
     internal var source: CGImageSource?
     
+    // 동기화 큐
+    lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.WebpExImage", attributes: .concurrent)
+
     // MARK: Initialization
     // 초기화
     init(from imageSource: WebpImage) {
