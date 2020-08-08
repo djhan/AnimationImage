@@ -10,32 +10,32 @@ import Cocoa
 import AnimationImagePrivate
 
 // MARK: - AnimationImage Class
-//==============================================================//
-//
-// Animation Image Class
-//
-//==============================================================//
+
+/**
+ Animation Image Class
+ - 애니메이션 이미지 클래스
+ */
 public class AnimationImage {
     // MARK: AnimationImage Enumerations
-    // 종류
+    /// 애니메이션 이미지 종류
     public enum type {
-        // GIF
+        /// GIF
         case gif
-        // PNG
+        /// PNG
         case png
-        // WEBP
+        /// WEBP
         case webp
-        // Unknown
+        /// Unknown
         case unknown
     }
 
-    // 각 프레임 별 지연 시간(duration) 저장 딕셔너리
-    private lazy var delays                 = [Int: Float]()
+    /// 각 프레임 별 지연 시간(duration) 저장 딕셔너리
+    private lazy var delays = [Int: Float]()
 
-    // 현재 인덱스
+    /// 현재 인덱스
     public var currentIndex = 0
     
-    // 총 이미지 개수
+    /// 총 이미지 개수
     public var numberOfItems: Int {
         var count: Int?
         switch self.type {
@@ -53,7 +53,7 @@ public class AnimationImage {
         // 실패시 0 반환
         return 0
     }
-    // 총 루프 횟수
+    /// 재생 반복 횟수
     public var loopCount: UInt {
         var loopCount: UInt?
         switch self.type {
@@ -72,29 +72,33 @@ public class AnimationImage {
         return 0
     }
 
-    // 이미지 소스
+    /// 이미지 소스
     private var image: DefaultAnimationImage?
-    // 이미지 종류
+    /// 이미지 종류
     private var type: AnimationImage.type = .unknown
-    // 종류별로 다운캐스팅된 이미지 소스
+    /// GIF 이미지 소스
     private var gifImage: GifImage? {
         return image as? GifImage
     }
+    /// PNG 이미지 소스
     private var pngImage: PngImage? {
         return image as? PngImage
     }
+    /// webp 이미지 소스
     private var webpImage: WebpExImage? {
         return image as? WebpExImage
     }
     
-    // 애니메이션 이미지 여부
+    /// 애니메이션 이미지 여부
     public var isAnimation: Bool {
         // 이미지 개수가 1개 이상인 경우 true 반환
         if self.numberOfItems > 1 { return true }
             // 아닌 경우, false 반환
         else { return false }
     }
-    // 현재 이미지 - 현재 인덱스의 이미지 반환: Original / Effect 여부는 자동 판별
+    /// 현재 이미지
+    /// - 현재 인덱스의 이미지 반환
+    /// - 원본 / 특수효과 이미지 여부는 자동 판별해서 반환
     public var currentImage: NSImage? {
         return self[self.currentIndex]
     }
@@ -108,8 +112,12 @@ public class AnimationImage {
         // 종류 대입
         self.type = type
     }
-    // URL + Delegate로 초기화 실행
-    // 마지막 frame의 index도 설정 가능
+    /**
+     초기화
+     - parameters:
+        - url: 애니메이션 파일 URL
+        - type: 애니메이션 이미지 종류
+     */
     public convenience init?(from url: URL, type: AnimationImage.type) {
         // 종류별로 image를 초기화
         switch type {
@@ -133,7 +141,12 @@ public class AnimationImage {
             return nil
         }
     }
-    // Data + Delegate로 초기화 실행
+    /**
+     초기화
+     - parameters:
+        - data: 애니메이션 Data
+        - type: 애니메이션 이미지 종류
+     */
     public convenience init?(from data: Data, type: AnimationImage.type) {
         // 종류별로 image를 초기화
         switch type {
@@ -159,12 +172,12 @@ public class AnimationImage {
     }
 
     // MARK: Method
-    // 특정 인덱스의 이미지를 반환
+    /// 특정 인덱스의 이미지를 반환
     private func image(at index: Int) -> NSImage? {
         return self.makeImage(from: index)
     }
 
-    // 오리지날 이미지 생성후 캐쉬에 저장
+    /// 오리지날 이미지 생성후 캐쉬에 저장
     private func makeImage(from index: Int) -> NSImage? {
         // 반환용 이미지
         var image: NSImage?
@@ -185,8 +198,8 @@ public class AnimationImage {
         return image
     }
 
-    // 특정 index의 delay : 외부 접근 메쏘드
-    // delay가 delay 딕셔너리에 없을 땐 가져온 뒤 딕셔너리에 반환
+    /// 특정 index의 delay 반환
+    /// - delay가 delay 딕셔너리에 없을 땐 가져온 뒤 딕셔너리에 반환
     public func delay(at index: Int)-> Float {
         if let delay = self.delays[index] {
             return delay
@@ -199,7 +212,7 @@ public class AnimationImage {
         }
     }
     
-    // 특정 index의 delay를 가져온다
+    /// 특정 index의 delay를 가져온다
     private func getDelay(at index: Int)-> Float {
         var delay: Float?
         switch self.type {
@@ -221,7 +234,7 @@ public class AnimationImage {
 
 
 // MARK: - AnimationImage Extension for Collection
-// Collection 프로토콜에 대응하기 위한 확장
+/// Collection 프로토콜에 대응하기 위한 확장
 extension AnimationImage: Collection {
     // MARK: Collection Protocol Related
     // collection 프로토콜용 메쏘드 및 프로퍼티
