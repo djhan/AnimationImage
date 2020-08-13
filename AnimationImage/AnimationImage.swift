@@ -103,9 +103,6 @@ public class AnimationImage {
         return self[self.currentIndex]
     }
 
-    /// 동기화 큐
-    private lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.AnimationImage", attributes: .concurrent)
-
     //===================================================//
     // 실제 이미지
     //===================================================//
@@ -253,12 +250,9 @@ extension AnimationImage: Collection {
     }
     // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용시에도 중요
     public subscript(index: Int)-> NSImage? {
-        var image: NSImage?
-        self.syncQueue.sync { [unowned self] in
-            // 해당 index 이미지 대입
-            image = self.image(at: index)
-        }
-        return image
+        // 각 AnimationImage가 이미 내부적으로 SyncQueue를 사용해 동기화를 하고 있기 때문에, 별도의 동기화는 불필요
+        // 해당 index 이미지 반환
+        return self.image(at: index)
     }
     // collection 프로토콜용 메쏘드 및 프로퍼티 종료
 }
