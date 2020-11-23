@@ -1,5 +1,9 @@
+// 2020/11/23 일자로 Big Sur의 webp 지원 기능을 사용하도록 변경
+// 사용하지 않음
+/*
 module AnimationImagePrivate {
     header "WebpFramework_umbrella.h"
 
     export *
 }
+*/

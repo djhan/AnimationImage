@@ -1,22 +1,20 @@
 //
-//  GifImage.swift
+//  WebpImage.swift
 //  AnimationImage
 //
-//  Created by DJ.HAN on 04/06/2019.
-//  Copyright © 2019 DJ.HAN. All rights reserved.
+//  Created by DJ.HAN on 2020/11/23.
+//  Copyright © 2020 DJ.HAN. All rights reserved.
 //
 
-import Cocoa
-//import AnimationImagePrivate
-
+import Foundation
 //================================================================================//
 //
-// GIF Image Class
+// Webp Image Class
 // AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
 //
 //================================================================================//
-// MARK: - GIFImageClass
-class GifImage: DefaultAnimationImage, AnimationConvertible {
+// MARK: - WebpImageClass
+class WebpImage: DefaultAnimationImage, AnimationConvertible {
     /// 소스의 연관값
     typealias SourceType = CGImageSource
 
@@ -42,7 +40,7 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
     //internal var webpImage: WebpImage?
     
     /// 동기화 큐
-    lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.GifImage", attributes: .concurrent)
+    lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.WebpImage", attributes: .concurrent)
 
     // MARK: Initialization
     /// 초기화
@@ -50,8 +48,8 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
         super.init()
         // 이미지 소스 대입
         self.imageSource = imageSource
-        // 소스 설정시 GIF 로 설정
-        self.type = .gif
+        // 소스 설정시 webp 로 설정
+        self.type = .webp
     }
     /// URL로 초기화
     convenience init?(from url:URL) {

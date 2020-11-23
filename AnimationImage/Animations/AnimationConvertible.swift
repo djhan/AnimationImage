@@ -8,35 +8,39 @@
 
 import Foundation
 import Cocoa
-import AnimationImagePrivate
+//import AnimationImagePrivate
 
 // MARK: Animation Convertible Protocol
 public protocol AnimationConvertible: class, Collection {
-    // 소스 연관 타입 설정
+    /// 소스 연관 타입 설정
     associatedtype SourceType
-    // 이미지 소스
+    /// 이미지 소스
     var imageSource: SourceType? { get }
     
-    // 싱크용 큐
+    /// 싱크용 큐
     var syncQueue: DispatchQueue { get }
     
-    // DefaultAnimationImage 클래스에서 선언
-    // type
+    /** DefaultAnimationImage 클래스에서 선언 */
+    /// type
     var type: AnimationImage.type { get }
-    // 크기
+    /// 크기
     var size: NSSize { get set }
-    // 애니메이션 여부
+    /// 애니메이션 여부
     var isAnimation: Bool { get }
-    // 루프 횟수
+    /// 루프 횟수
     var loopCount: UInt { get set }
-    // 특정 인덱스의 delay(duration)
+    /// 특정 인덱스의 delay(duration)
     func delayTime(at index: Index)-> Float
 }
 
 // MARK: Animation Convertible Extension
 extension AnimationConvertible {
-    // imageSource를 cgImageSource로 캐스팅해서 반환 (가능한 경우)
-    // Core Foundation 변수가 opaque 타입이기 때문에 as 를 이용한 CF 타입 -> swift 타입 다운캐스팅에 문제가 있음. 따라서 이 같은 처리가 필요
+    /**
+     imageSource를 cgImageSource로 캐스팅해서 반환 (가능한 경우)
+     
+     # 참고사항
+     - Core Foundation 변수가 opaque 타입이기 때문에 as 를 이용한 CF 타입 -> swift 타입 다운캐스팅에 문제가 있음. 따라서 이 같은 처리가 필요
+     */
     private var castedCGImageSource: CGImageSource? {
         if self.imageSource != nil {
             guard CFGetTypeID(self.imageSource as CFTypeRef) == CGImageSourceGetTypeID() else { return nil }
@@ -45,10 +49,13 @@ extension AnimationConvertible {
         return nil
     }
     
-    // GIF/PNG의 특정 인덱스의 메타데이터 딕셔너리에서 값을 구한다
+    /// GIF/PNG/Webp의 특정 인덱스의 메타데이터 딕셔너리에서 값을 구한다
     public func dictionaryValue(at index: Int, key: NSString) -> Any?  {
         // webp 또는 unknown 포맷은 처리 불가, NIL 반환
-        if self.type == .webp || self.type == .unknown { return nil }
+        //if self.type == .webp || self.type == .unknown { return nil }
+        
+        // unknown 포맷은 처리 불가, NIL 반환
+        if self.type == .unknown { return nil }
         // imageSource가 제대로 설정되지 않은 경우 중지
         guard let imageSource = self.castedCGImageSource else { return nil }
         // Metadata Dictionaries Key를 설정
@@ -73,6 +80,13 @@ extension AnimationConvertible {
     }
     // 프레임 갯수
     public var frameCount: Int {
+        // imageSource가 없을 떄는 0 반환
+        guard let imageSource = self.castedCGImageSource else {
+            return 0
+        }
+        return CGImageSourceGetCount(imageSource)
+
+        /*
         // webp 인 경우
         if self.type == .webp {
             // imageSource가 없을 떄는 0 반환
@@ -92,10 +106,11 @@ extension AnimationConvertible {
         }
         // 그 외의 경우
         return 0
+         */
     }
 
     // MARK: Collection Protocol Related
-    // collection 프로토콜용 메쏘드 및 프로퍼티
+    /// collection 프로토콜용 메쏘드 및 프로퍼티
     public func index(after i: Int) -> Int {
         return i+1
     }
@@ -106,7 +121,7 @@ extension AnimationConvertible {
         // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, frameCount를 반환하면 된다!
         return self.frameCount
     }
-    // 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
+    /// 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
     public subscript(index: Int)-> NSImage? {
         // 동시성 확보를 위해, 싱크 처리
         self.syncQueue.sync { [weak self] () -> NSImage? in
@@ -114,6 +129,7 @@ extension AnimationConvertible {
             // self가 NIL인 경우, NIL 반환
             guard let strongSelf = self else { return nil }
             if index < strongSelf.frameCount {
+                /*
                 var cgImage: CGImage?
                 // webp 인 경우
                 if strongSelf.type == .webp {
@@ -131,7 +147,11 @@ extension AnimationConvertible {
                 if cgImage != nil {
                     let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
                     return NSImage.init(cgImage: cgImage!, size: size)
-                }
+                }*/
+                guard let imageSource = strongSelf.castedCGImageSource,
+                      let cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil) else { return nil }
+                let size = NSMakeSize(CGFloat(cgImage.width), CGFloat(cgImage.height))
+                return NSImage.init(cgImage: cgImage, size: size)
             }
             // 이외의 경우, NIL 반환
             return nil
@@ -143,10 +163,10 @@ extension AnimationConvertible {
 public class DefaultAnimationImage {
     // Dummy Class로 선언됨
     
-    // type
+    /// type
     var type: AnimationImage.type = .unknown
-    // 크기: NSZeroSize로 초기화
+    /// 크기: NSZeroSize로 초기화
     public var size: NSSize = NSZeroSize
-    // 반복 횟수 = 0으로 초기화
+    /// 반복 횟수 = 0으로 초기화
     public var loopCount: UInt = 0
 }

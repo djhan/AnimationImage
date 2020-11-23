@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import AnimationImagePrivate
+//import AnimationImagePrivate
 
 // MARK: - AnimationImage Class
 
@@ -85,9 +85,14 @@ public class AnimationImage {
         return image as? PngImage
     }
     /// webp 이미지 소스
+    private var webpImage: WebpImage? {
+        return image as? WebpImage
+    }
+    /*
+    /// webp 이미지 소스
     private var webpImage: WebpExImage? {
         return image as? WebpExImage
-    }
+    }*/
     
     /// 애니메이션 이미지 여부
     public var isAnimation: Bool {
@@ -132,7 +137,8 @@ public class AnimationImage {
             self.init(type: type)
             self.image = image
         case .webp:
-            guard let image = WebpExImage.init(from: url) else { return nil }
+            //guard let image = WebpExImage.init(from: url) else { return nil }
+            guard let image = WebpImage.init(from: url) else { return nil }
             // 초기화 실행
             self.init(type: type)
             self.image = image
@@ -161,7 +167,8 @@ public class AnimationImage {
             self.init(type: type)
             self.image = image
         case .webp:
-            guard let image = WebpExImage.init(from: data) else { return nil }
+            //guard let image = WebpExImage.init(from: data) else { return nil }
+            guard let image = WebpImage.init(from: data) else { return nil }
             // 초기화 실행
             self.init(type: type)
             self.image = image

@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import AnimationImagePrivate
+//import AnimationImagePrivate
 
 //================================================================================//
 //
@@ -37,7 +37,7 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
         }
     }
     // 사용하지 않음
-    internal var webpImage: WebpImage?
+    //internal var webpImage: WebpImage?
 
     // 동기화 큐
     lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.PngImage", attributes: .concurrent)

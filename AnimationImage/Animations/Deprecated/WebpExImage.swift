@@ -5,7 +5,7 @@
 //  Created by DJ.HAN on 05/06/2019.
 //  Copyright © 2019 DJ.HAN. All rights reserved.
 //
-
+/*
 import Cocoa
 import AnimationImagePrivate
 
@@ -74,3 +74,4 @@ class WebpExImage: DefaultAnimationImage, AnimationConvertible {
         return delayTime
     }
 }
+*/
