@@ -16,15 +16,16 @@ import Foundation
 // MARK: - WebpImageClass
 class WebpImage: DefaultAnimationImage, AnimationConvertible {
     /// 소스의 연관값
-    typealias SourceType = CGImageSource
+    //typealias SourceType = CGImageSource
 
     /**
      이미지 소스
      - type: DefaultAnimationImage에서 선언됨
      */
-    internal var imageSource: SourceType? {
-        // 설정 직후 할 일
-        didSet {
+    internal var imageSource: CGImageSource? {
+        get { self._imageSource }
+        set {
+            self._imageSource = newValue
             // 첫 번째 이미지를 가져온다
             if let firstImage = self[0] {
                 // 크기 설정
@@ -32,15 +33,18 @@ class WebpImage: DefaultAnimationImage, AnimationConvertible {
             }
             // NSNumber로 loopCount 값을 받아온다
             // 값을 받아오지 못한 경우는 실패 처리
-            guard let loopCount = self.dictionaryValue(at: NSNotFound, key: kCGImagePropertyGIFLoopCount as NSString) as? NSNumber else { return }
-            self.loopCount = UInt(truncating: loopCount)
+            //guard let loopCount = self.dictionaryValue(at: NSNotFound, key: kCGImagePropertyGIFLoopCount as NSString) as? NSNumber else { return }
+            //self.loopCount = UInt(truncating: loopCount)
         }
     }
+    /// 실제 이미지 소스
+    private var _imageSource: CGImageSource?
+
     // 사용하지 않음
     //internal var webpImage: WebpImage?
     
     /// 동기화 큐
-    lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.WebpImage", attributes: .concurrent)
+    //lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.WebpImage", attributes: .concurrent)
 
     // MARK: Initialization
     /// 초기화
