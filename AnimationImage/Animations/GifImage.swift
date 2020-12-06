@@ -9,20 +9,16 @@
 import Cocoa
 //import AnimationImagePrivate
 
-//================================================================================//
-//
-// GIF Image Class
-// AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
-//
-//================================================================================//
-// MARK: - GIFImageClass
+// MARK: - GIFImageClass -
+/**
+ GIF Image Class
+ - AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
+ */
 class GifImage: DefaultAnimationImage, AnimationConvertible {
-    /// 소스의 연관값
-    //typealias SourceType = CGImageSource
 
+    // MARK: Properties
     /**
      이미지 소스
-     - type: DefaultAnimationImage에서 선언됨
      */
     internal var imageSource: CGImageSource? {
         get { return self._imageSource }
@@ -41,12 +37,6 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
     }
     /// 실제 이미지 소스
     private var _imageSource: CGImageSource?
-
-    // 사용하지 않음
-    //internal var webpImage: WebpImage?
-    
-    /// 동기화 큐
-    //lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.GifImage", attributes: .concurrent)
 
     // MARK: Initialization
     /// 초기화

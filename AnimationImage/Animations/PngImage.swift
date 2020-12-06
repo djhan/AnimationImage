@@ -9,19 +9,17 @@
 import Cocoa
 //import AnimationImagePrivate
 
-//================================================================================//
-//
-// PNG Image Class
-// AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
-//
-//================================================================================//
+// MARK: - PNG Image Class -
+/**
+ PNG Image Class
+ - AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
+ */
 class PngImage: DefaultAnimationImage, AnimationConvertible {
-    // 소스의 연관값
-    //typealias SourceType = CGImageSource
-    
-    // 종류
-    // type: DefaultAnimationImage에서 선언됨
-    // 이미지 소스
+
+    // MARK: Properties
+    /**
+     이미지 소스
+     */
     internal var imageSource: CGImageSource? {
         get { return self._imageSource }
         set {
@@ -39,11 +37,6 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
     }
     /// 실제 이미지 소스
     private var _imageSource: CGImageSource?
-    // 사용하지 않음
-    //internal var webpImage: WebpImage?
-
-    // 동기화 큐
-    //lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.PngImage", attributes: .concurrent)
 
     // MARK: Initialization
     // 초기화

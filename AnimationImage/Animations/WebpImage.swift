@@ -7,20 +7,19 @@
 //
 
 import Foundation
-//================================================================================//
-//
-// Webp Image Class
-// AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
-//
-//================================================================================//
-// MARK: - WebpImageClass
-class WebpImage: DefaultAnimationImage, AnimationConvertible {
-    /// 소스의 연관값
-    //typealias SourceType = CGImageSource
 
+// MARK: - WebpImageClass -
+/**
+ Webp Image Class
+ - AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)
+ - Important:
+    - 현재 loopCount / frame delay time은 GIF 키값을 가져오고 있는데, 추후 CGImageSource 문서의 갱신사항을 검토할 필요 있음
+ */
+class WebpImage: DefaultAnimationImage, AnimationConvertible {
+    
+    // MARK: Properties
     /**
      이미지 소스
-     - type: DefaultAnimationImage에서 선언됨
      */
     internal var imageSource: CGImageSource? {
         get { self._imageSource }
@@ -33,18 +32,12 @@ class WebpImage: DefaultAnimationImage, AnimationConvertible {
             }
             // NSNumber로 loopCount 값을 받아온다
             // 값을 받아오지 못한 경우는 실패 처리
-            //guard let loopCount = self.dictionaryValue(at: NSNotFound, key: kCGImagePropertyGIFLoopCount as NSString) as? NSNumber else { return }
-            //self.loopCount = UInt(truncating: loopCount)
+            guard let loopCount = self.dictionaryValue(at: NSNotFound, key: kCGImagePropertyGIFLoopCount as NSString) as? NSNumber else { return }
+            self.loopCount = UInt(truncating: loopCount)
         }
     }
     /// 실제 이미지 소스
     private var _imageSource: CGImageSource?
-
-    // 사용하지 않음
-    //internal var webpImage: WebpImage?
-    
-    /// 동기화 큐
-    //lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.WebpImage", attributes: .concurrent)
 
     // MARK: Initialization
     /// 초기화
