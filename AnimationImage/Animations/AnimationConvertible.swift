@@ -8,21 +8,27 @@
 
 import Foundation
 import Cocoa
-//import AnimationImagePrivate
+import AnimationImagePrivate
 
 // MARK: Animation Convertible Protocol
+/**
+ Animation Convertible 프로토콜
+
+ - 2020/12 기준으로 Big Sur의 Webp 지원을 사용하려고 시도
+ - 현재 버그가 너무 많아서 다시 libWebp로 회귀
+ */
 public protocol AnimationConvertible: class, Collection {
     /// 소스 연관 타입 설정
-    //associatedtype SourceType
+    associatedtype SourceType
     /// 이미지 소스
-    //var imageSource: SourceType? { get }
+    var imageSource: SourceType? { get }
     
     /// 이미지 소스
     /// - CGImageSource로 통일됨. webp 독자 소스 사용하지 않음
-    var imageSource: CGImageSource? { get }
+    // var imageSource: CGImageSource? { get }
 
     /// 싱크용 큐
-    //var syncQueue: DispatchQueue { get }
+    var syncQueue: DispatchQueue { get }
     
     /** DefaultAnimationImage 클래스에서 선언 */
     /// type
@@ -39,7 +45,6 @@ public protocol AnimationConvertible: class, Collection {
 
 // MARK: Animation Convertible Extension
 extension AnimationConvertible {
-    /*
     /**
      imageSource를 cgImageSource로 캐스팅해서 반환 (가능한 경우)
      
@@ -52,18 +57,18 @@ extension AnimationConvertible {
             return (self.imageSource as! CGImageSource)
         }
         return nil
-    }*/
+    }
     
     /// GIF/PNG/Webp의 특정 인덱스의 메타데이터 딕셔너리에서 값을 구한다
     public func dictionaryValue(at index: Int, key: NSString) -> Any?  {
         // webp 또는 unknown 포맷은 처리 불가, NIL 반환
-        //if self.type == .webp || self.type == .unknown { return nil }
+        if self.type == .webp || self.type == .unknown { return nil }
         
         // unknown 포맷은 처리 불가, NIL 반환
         if self.type == .unknown { return nil }
         // imageSource가 제대로 설정되지 않은 경우 중지
-        //guard let imageSource = self.castedCGImageSource else { return nil }
-        guard let imageSource = self.imageSource else { return nil }
+        guard let imageSource = self.castedCGImageSource else { return nil }
+        //guard let imageSource = self.imageSource else { return nil }
         // Metadata Dictionaries Key를 설정
         let metadadaKey = self.type == .gif ? kCGImagePropertyGIFDictionary as NSString : kCGImagePropertyPNGDictionary as NSString
         // Metadata Dictionaries 를 설정
@@ -86,6 +91,7 @@ extension AnimationConvertible {
     }
     /// 프레임 갯수
     public var frameCount: Int {
+        /*
         // imageSource가 없을 떄는 0 반환
         //guard let imageSource = self.castedCGImageSource else {
         guard let imageSource = self.imageSource else {
@@ -93,8 +99,7 @@ extension AnimationConvertible {
             return 0
         }
         return CGImageSourceGetCount(imageSource)
-
-        /*
+         */
         // webp 인 경우
         if self.type == .webp {
             // imageSource가 없을 떄는 0 반환
@@ -114,7 +119,6 @@ extension AnimationConvertible {
         }
         // 그 외의 경우
         return 0
-         */
     }
 
     // MARK: Collection Protocol Related
@@ -131,6 +135,41 @@ extension AnimationConvertible {
     }
     /// 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
     public subscript(index: Int)-> NSImage? {
+        // 동시성 확보를 위해, 싱크 처리
+        self.syncQueue.sync { [weak self] () -> NSImage? in
+
+            // self가 NIL인 경우, NIL 반환
+            guard let strongSelf = self else { return nil }
+            guard 0 ..< strongSelf.frameCount ~= index else {
+                print("AnimationConvertible>subscript: \(index)가 프레임 범위 \(strongSelf.frameCount)를 초과!")
+                return nil
+            }
+            if index < strongSelf.frameCount {
+                var cgImage: CGImage?
+                // webp 인 경우
+                if strongSelf.type == .webp {
+                    guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
+                    // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
+                    // new로 생성된 것이 아니기 때문에, unretained로 처리
+                    cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
+                }
+                    // GIF/PNG 인 경우
+                else if strongSelf.type == .gif || strongSelf.type == .png {
+                    guard let imageSource = strongSelf.castedCGImageSource else { return nil }
+                    cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
+                }
+                
+                // cgImage를 정상적으로 받았는지 확인
+                guard cgImage != nil else { return nil }
+                // 정상적으로 받아온 경우, NSImage로 반환
+                let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
+                return NSImage.init(cgImage: cgImage!, size: size)
+            }
+            // 이외의 경우, NIL 반환
+            return nil
+        }
+
+        /*
         guard 0 ..< self.frameCount ~= index else {
             /**
              # 주의사항:
@@ -139,6 +178,7 @@ extension AnimationConvertible {
             assertionFailure("AnimationConvertible>subscript: \(index)가 프레임 범위를 초과!")
             return nil
         }
+        
         guard let imageSource = self.imageSource,
               let cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil) else {
             print("AnimationConvertible>subscript: \(index) >> cgImage 생성 실패!")
@@ -146,26 +186,7 @@ extension AnimationConvertible {
         }
         let size = NSMakeSize(CGFloat(cgImage.width), CGFloat(cgImage.height))
         return NSImage.init(cgImage: cgImage, size: size)
-
-                    /*
-                    var cgImage: CGImage?
-                    // webp 인 경우
-                    if strongSelf.type == .webp {
-                        guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
-                        // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
-                        // new로 생성된 것이 아니기 때문에, unretained로 처리
-                        cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
-                    }
-                        // GIF/PNG 인 경우
-                    else if strongSelf.type == .gif || strongSelf.type == .png {
-                        guard let imageSource = strongSelf.castedCGImageSource else { return nil }
-                        cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
-                    }
-                    // cgImage를 정상적으로 받은 경우
-                    if cgImage != nil {
-                        let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
-                        return NSImage.init(cgImage: cgImage!, size: size)
-                    }*/
+         */
     }
 }
 

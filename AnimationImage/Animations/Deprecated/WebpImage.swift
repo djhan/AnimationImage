@@ -6,6 +6,7 @@
 //  Copyright © 2020 DJ.HAN. All rights reserved.
 //
 
+/*
 import Foundation
 
 // MARK: - WebpImageClass -
@@ -77,3 +78,5 @@ class WebpImage: DefaultAnimationImage, AnimationConvertible {
         return delayTime
     }
 }
+*/
+

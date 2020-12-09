@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-//import AnimationImagePrivate
+import AnimationImagePrivate
 
 // MARK: - PNG Image Class -
 /**
@@ -17,10 +17,13 @@ import Cocoa
 class PngImage: DefaultAnimationImage, AnimationConvertible {
 
     // MARK: Properties
+    // 소스의 연관값
+    typealias SourceType = CGImageSource
+
     /**
      이미지 소스
      */
-    internal var imageSource: CGImageSource? {
+    internal var imageSource: SourceType? {
         get { return self._imageSource }
         set {
             self._imageSource = newValue
@@ -37,6 +40,11 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
     }
     /// 실제 이미지 소스
     private var _imageSource: CGImageSource?
+
+    /// webpImage 프로퍼티: 사용하지 않음
+    internal var webpImage: WebpImage?
+    /// 동기화 큐
+    lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.GifImage", attributes: .concurrent)
 
     // MARK: Initialization
     // 초기화
