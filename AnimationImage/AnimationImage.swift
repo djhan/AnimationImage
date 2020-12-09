@@ -88,11 +88,6 @@ public class AnimationImage {
     private var webpImage: WebpExImage? {
         return image as? WebpExImage
     }
-    /*
-    /// webp 이미지 소스
-    private var webpImage: WebpExImage? {
-        return image as? WebpExImage
-    }*/
     
     /// 애니메이션 이미지 여부
     public var isAnimation: Bool {
