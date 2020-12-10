@@ -90,6 +90,7 @@ extension AnimationConvertible {
         return false
     }
     /// 프레임 갯수
+    /// - syncQueue로 동기화된 값 반환
     public var frameCount: Int {
         /*
         // imageSource가 없을 떄는 0 반환
@@ -100,6 +101,15 @@ extension AnimationConvertible {
         }
         return CGImageSourceGetCount(imageSource)
          */
+        
+        return self.syncQueue.sync { [weak self] () -> Int in
+            guard let strongSelf = self else { return 0 }
+            return strongSelf._frameCount
+        }
+    }
+    /// 프레임 갯수 반환 내부 private 메쏘드
+    /// - syncQueue 동기화를 위해서 내부에서만 사용한다
+    private var _frameCount: Int {
         // webp 인 경우
         if self.type == .webp {
             // imageSource가 없을 떄는 0 반환
@@ -122,7 +132,7 @@ extension AnimationConvertible {
     }
 
     // MARK: Collection Protocol Related
-    /// collection 프로토콜용 메쏘드 및 프로퍼티
+    /** collection 프로토콜용 메쏘드 및 프로퍼티 **/
     public func index(after i: Int) -> Int {
         return i+1
     }
@@ -131,6 +141,7 @@ extension AnimationConvertible {
     }
     public var endIndex: Int {
         // 배열인 경우, ..< endIndex 로 비교. endIndex 자체는 포함되지 않기 때문에, frameCount를 반환하면 된다!
+        // syncQueue로 동기화된 `frameCount` 반환
         return self.frameCount
     }
     /// 특정 인덱스의 이미지를 반환 : Collection 프로토콜 사용
@@ -140,33 +151,31 @@ extension AnimationConvertible {
 
             // self가 NIL인 경우, NIL 반환
             guard let strongSelf = self else { return nil }
-            guard 0 ..< strongSelf.frameCount ~= index else {
+            // 동기화되지 않은 _frameCount 사용해서 범위 확인
+            guard 0 ..< strongSelf._frameCount ~= index else {
                 print("AnimationConvertible>subscript: \(index)가 프레임 범위 \(strongSelf.frameCount)를 초과!")
                 return nil
             }
-            if index < strongSelf.frameCount {
-                var cgImage: CGImage?
-                // webp 인 경우
-                if strongSelf.type == .webp {
-                    guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
-                    // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
-                    // new로 생성된 것이 아니기 때문에, unretained로 처리
-                    cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
-                }
-                    // GIF/PNG 인 경우
-                else if strongSelf.type == .gif || strongSelf.type == .png {
-                    guard let imageSource = strongSelf.castedCGImageSource else { return nil }
-                    cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
-                }
-                
-                // cgImage를 정상적으로 받았는지 확인
-                guard cgImage != nil else { return nil }
-                // 정상적으로 받아온 경우, NSImage로 반환
-                let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
-                return NSImage.init(cgImage: cgImage!, size: size)
+            
+            var cgImage: CGImage?
+            // webp 인 경우
+            if strongSelf.type == .webp {
+                guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
+                // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
+                // new로 생성된 것이 아니기 때문에, unretained로 처리
+                cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
             }
-            // 이외의 경우, NIL 반환
-            return nil
+            // GIF/PNG 인 경우
+            else if strongSelf.type == .gif || strongSelf.type == .png {
+                guard let imageSource = strongSelf.castedCGImageSource else { return nil }
+                cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
+            }
+            
+            // cgImage를 정상적으로 받았는지 확인
+            guard cgImage != nil else { return nil }
+            // 정상적으로 받아온 경우, NSImage로 반환
+            let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
+            return NSImage.init(cgImage: cgImage!, size: size)
         }
 
         /*

@@ -17,7 +17,7 @@ import AnimationImagePrivate
 class GifImage: DefaultAnimationImage, AnimationConvertible {
 
     // MARK: Properties    
-    // 소스의 연관값
+    /// 소스의 연관값
     typealias SourceType = CGImageSource
 
     /**
@@ -43,8 +43,15 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
 
     /// webpImage 프로퍼티: 사용하지 않음
     internal var webpImage: WebpImage?
-    /// 동기화 큐
-    lazy var syncQueue = DispatchQueue(label: "djhan.EdgeView.GifImage", attributes: .concurrent)
+    /**
+    동기화 큐
+
+     # 중요사항
+     - lazy 변수는 [원자적으로 초기화되지 않기 때문] (https://sungwon-choi-29.github.io/trend/2019-08-14-trend/)에 lazy 초기화는 취소한다
+     - let으로 선언된 내부 프로퍼티 `_syncQueue`를 반환해서 사용하도록 변경한다
+     */
+    internal var syncQueue: DispatchQueue { return self._syncQueue }
+    private let _syncQueue = DispatchQueue(label: "djhan.EdgeView.GifImage", attributes: .concurrent)
 
     // MARK: Initialization
     /// 초기화
