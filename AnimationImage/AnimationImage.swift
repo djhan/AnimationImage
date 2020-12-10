@@ -161,7 +161,8 @@ public class AnimationImage {
             self.init(type: type)
             self.image = image
         case .webp:
-            guard let image = WebpExImage.init(from: data) else { return nil }
+            //guard let image = WebpExImage.init(from: data) else { return nil }
+            let image = WebpExImage.init(from: data)
             // 초기화 실행
             self.init(type: type)
             self.image = image
