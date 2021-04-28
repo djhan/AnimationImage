@@ -16,8 +16,9 @@ import AnimationImagePrivate
 
  - 2020/12 기준으로 Big Sur의 Webp 지원을 사용하려고 시도
  - 현재 버그가 너무 많아서 다시 libWebp로 회귀
+ - MacOS 11.3 Update 이후 class -> AnyObject로 변경
  */
-public protocol AnimationConvertible: class, Collection {
+public protocol AnimationConvertible: AnyObject, Collection {
     /// 소스 연관 타입 설정
     associatedtype SourceType
     /// 이미지 소스
