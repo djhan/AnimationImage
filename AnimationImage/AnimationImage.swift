@@ -108,6 +108,7 @@ public class AnimationImage {
     public var exifData: AnimationExifData? {
         get {
             switch self.type {
+            case .gif: return self.gifImage?.exifData
             case .png: return self.pngImage?.exifData
             case .webp: return self.webpImage?.exifData
             default: return nil
@@ -115,6 +116,7 @@ public class AnimationImage {
         }
         set {
             switch self.type {
+            case .gif: self.gifImage?.exifData = newValue
             case .png: self.pngImage?.exifData = newValue
             case .webp: self.webpImage?.exifData = newValue
             default: return

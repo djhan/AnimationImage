@@ -64,6 +64,8 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
         self.imageSource = imageSource
         // 소스 설정시 GIF 로 설정
         self.type = .gif
+        // exifData 설정
+        self.exifData = imageSource.exifData
     }
     /// URL로 초기화
     convenience init?(from url: URL) {
