@@ -103,6 +103,25 @@ public class AnimationImage {
         return self[self.currentIndex]
     }
 
+    /// Exif Data
+    /// - PNG/Webp의 EXIF Data
+    public var exifData: AnimationExifData? {
+        get {
+            switch self.type {
+            case .png: return self.pngImage?.exifData
+            case .webp: return self.webpImage?.exifData
+            default: return nil
+            }
+        }
+        set {
+            switch self.type {
+            case .png: self.pngImage?.exifData = newValue
+            case .webp: self.webpImage?.exifData = newValue
+            default: return
+            }
+        }
+    }
+    
     //===================================================//
     // 실제 이미지
     //===================================================//

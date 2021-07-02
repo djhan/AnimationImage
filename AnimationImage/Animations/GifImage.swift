@@ -41,6 +41,9 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
     /// 실제 이미지 소스
     private var _imageSource: CGImageSource?
 
+    /// ExifData
+    var exifData: AnimationExifData?
+
     /// webpImage 프로퍼티: 사용하지 않음
     internal var webpImage: WebpImage?
     /**
@@ -63,14 +66,14 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
         self.type = .gif
     }
     /// URL로 초기화
-    convenience init?(from url:URL) {
+    convenience init?(from url: URL) {
         // 이미지 소스 생성 실패시 nil 반환
         guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
         // 정상적으로 초기화
         self.init(from: imageSource)
     }
     /// Data로 초기화
-    convenience init?(from data:Data) {
+    convenience init?(from data: Data) {
         // 이미지 소스 생성 실패시 nil 반환
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
         // 정상적으로 초기화

@@ -10,6 +10,15 @@ import Foundation
 import Cocoa
 import AnimationImagePrivate
 
+
+// MARK: Typealiases
+
+/// EXIF Properties 배열
+public typealias AnimationExifData = Array<AnimationExifProperties>
+/// EXIF Properties 타입
+public typealias AnimationExifProperties = Dictionary<String, Any>
+
+
 // MARK: Animation Convertible Protocol
 /**
  Animation Convertible 프로토콜
@@ -23,14 +32,13 @@ public protocol AnimationConvertible: AnyObject, Collection {
     associatedtype SourceType
     /// 이미지 소스
     var imageSource: SourceType? { get }
-    
-    /// 이미지 소스
-    /// - CGImageSource로 통일됨. webp 독자 소스 사용하지 않음
-    // var imageSource: CGImageSource? { get }
 
     /// 싱크용 큐
     var syncQueue: DispatchQueue { get }
     
+    /// ExifData
+    var exifData: AnimationExifData? { get set }
+
     /** DefaultAnimationImage 클래스에서 선언 */
     /// type
     var type: AnimationImage.type { get }
@@ -93,16 +101,6 @@ extension AnimationConvertible {
     /// 프레임 갯수
     /// - syncQueue로 동기화된 값 반환
     public var frameCount: Int {
-        /*
-        // imageSource가 없을 떄는 0 반환
-        //guard let imageSource = self.castedCGImageSource else {
-        guard let imageSource = self.imageSource else {
-            print("AnimationConvertible>frameCount: imageSource가 없음...")
-            return 0
-        }
-        return CGImageSourceGetCount(imageSource)
-         */
-        
         return self.syncQueue.sync { [weak self] () -> Int in
             guard let strongSelf = self else { return 0 }
             return strongSelf._frameCount
@@ -130,6 +128,20 @@ extension AnimationConvertible {
         }
         // 그 외의 경우
         return 0
+    }
+
+    /// 특정 인덱스의 ExifProperties
+    private func exifProperties(at index: Int) -> AnimationExifProperties? {
+        return self.exifData?[index]
+    }
+    /// 특정 인덱스의 메타데이터의 Orientation 방향
+    private func orientationByMetadata(at index: Int) -> CGImagePropertyOrientation {
+        guard let exifProperties = self.exifProperties(at: index),
+              let orientationValue = exifProperties[kCGImagePropertyOrientation as String],
+              let orientation = orientationValue as? UInt32 else { return CGImagePropertyOrientation.up }
+        // orientation값 기반으로 CGImagePropertyOrientation 키값을 반환
+        // 강제 옵셔널 벗기기로 반환한다 (항상 값이 있을 것으로 간주)
+        return CGImagePropertyOrientation(rawValue: orientation)!
     }
 
     // MARK: Collection Protocol Related
@@ -174,29 +186,51 @@ extension AnimationConvertible {
             
             // cgImage를 정상적으로 받았는지 확인
             guard cgImage != nil else { return nil }
+            
             // 정상적으로 받아온 경우, NSImage로 반환
-            let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
-            return NSImage.init(cgImage: cgImage!, size: size)
+            
+            // PNG / webP 파일은 현재 Orientation에 맞춰서 변환, 반환
+            if strongSelf.type == .png || strongSelf.type == .webp {
+                return strongSelf.transfromBy(strongSelf.orientationByMetadata(at: index), cgImage: cgImage!)
+            }
+            // 그 외의 경우는 그대로 반환
+            else {
+                let size = NSMakeSize(CGFloat(cgImage!.width), CGFloat(cgImage!.height))
+                return NSImage.init(cgImage: cgImage!, size: size)
+            }
         }
+    }
+    
+    /**
+     EXIF Property 기준으로 orientation 전환된 NSImage 반환
 
-        /*
-        guard 0 ..< self.frameCount ~= index else {
-            /**
-             # 주의사항:
-             // 여기서 중지되는 경우, webp에서 문제가 생겼을 가능성 있음. imageSource에 정상적으로 값이 들어갔는지 확인 필요
-             */
-            assertionFailure("AnimationConvertible>subscript: \(index)가 프레임 범위를 초과!")
-            return nil
+     # 참고사항:
+     EdgeView 3 의`CGImageExtenstion`의 코드를 그대로 복사해 가져옴.
+     - CommonLibrary에 넣고 싶으나, CommonLibrary가 먼저 AnimationImage를 참고하기 때문에, 어쩔 수 없이 여기에 복사해서 사용한다
+
+     - Parameters:
+        - orientation: 회전/반전 여부. CGImagePropertyOrientation 값
+        - cgImage: `CGImage`
+     - Returns: NSImage. 실패시 NIL 반환
+     */
+    private func transfromBy(_ orientation: CGImagePropertyOrientation, cgImage: CGImage) -> NSImage? {
+        
+        //----------------------------------------------------------------------------//
+        /// CGImage를 NSImage로 반환하는 내부 메쏘드
+        func convertedImage(_ cgImage: CGImage) -> NSImage? {
+            let size = NSMakeSize(CGFloat(cgImage.width), CGFloat(cgImage.height))
+            return NSImage.init(cgImage: cgImage, size: size)
+        }
+        //----------------------------------------------------------------------------//
+
+        guard orientation != .up else {
+            // 별도 변환 없이 반환
+            return convertedImage(cgImage)
         }
         
-        guard let imageSource = self.imageSource,
-              let cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil) else {
-            print("AnimationConvertible>subscript: \(index) >> cgImage 생성 실패!")
-            return nil
-        }
-        let size = NSMakeSize(CGFloat(cgImage.width), CGFloat(cgImage.height))
-        return NSImage.init(cgImage: cgImage, size: size)
-         */
+        // up 이외의 방향인 경우
+        guard let transformedCGImage = cgImage.transfrom(orientation: orientation) else { return nil }
+        return convertedImage(transformedCGImage)
     }
 }
 

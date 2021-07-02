@@ -40,6 +40,13 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
     }
     /// 실제 이미지 소스
     private var _imageSource: CGImageSource?
+    
+    /// ExifData
+    var exifData: AnimationExifData?/* {
+        didSet {
+            print("exif 변경")
+        }
+    }*/
 
     /// webpImage 프로퍼티: 사용하지 않음
     internal var webpImage: WebpImage?
@@ -61,9 +68,11 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
         self.imageSource = imageSource
         // 소스 설정시 PNG 로 설정
         self.type = .png
+        // exifData 설정
+        self.exifData = imageSource.exifData
     }
     /// URL로 초기화
-    convenience init?(from url:URL) {
+    convenience init?(from url: URL) {
         // 이미지 소스 생성 실패시 nil 반환
         guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
         // 정상적으로 초기화
@@ -71,7 +80,7 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
     }
     
     /// Data로 초기화
-    convenience init?(from data:Data) {
+    convenience init?(from data: Data) {
         // 이미지 소스 생성 실패시 nil 반환
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
         // 정상적으로 초기화

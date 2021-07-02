@@ -38,6 +38,9 @@ class WebpExImage: DefaultAnimationImage, AnimationConvertible {
     // 사용하지 않음
     internal var source: CGImageSource?
     
+    /// ExifData
+    var exifData: AnimationExifData?
+
     /**
     동기화 큐
 
@@ -58,19 +61,27 @@ class WebpExImage: DefaultAnimationImage, AnimationConvertible {
         self.type = .webp
     }
     /// URL로 초기화
-    convenience init?(from url:URL) {
+    convenience init?(from url: URL) {
         // 이미지 소스 생성 실패시 nil 반환
         guard let imageSource = WebpImage.init(url: url) else { return nil }
         // 정상적으로 초기화
         self.init(from: imageSource)
+        
+        if let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) {
+            self.exifData = imageSource.exifData
+        }
     }
     
     /// Data로 초기화
-    convenience init?(from data:Data) {
+    convenience init?(from data: Data) {
         // 이미지 소스 생성 실패시 nil 반환
         guard let imageSource = WebpImage.init(data: data) else { return nil }
         // 정상적으로 초기화
         self.init(from: imageSource)
+        
+        if let imageSource = CGImageSourceCreateWithData(data as CFData, nil) {
+            self.exifData = imageSource.exifData
+        }
     }
     
     // MARK: Method
