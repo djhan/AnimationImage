@@ -101,8 +101,7 @@
 				EE394D2E22A6969200198FDB /* GifImage.swift */,
 				EE394D3022A6969D00198FDB /* PngImage.swift */,
 				EE8F24B622A74BBC00F9E0BA /* WebpExImage.swift */,
-				EE34148F268EF3C400149873 /* CGImageExtension.swift */,
-				EE341492268EFCB800149873 /* CGImageSourceExtension.swift */,
+				EEA32D5B268F3399003F633E /* Extension */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -129,6 +128,15 @@
 				EE62C819256B860100C982E1 /* WebpImage.swift */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		EEA32D5B268F3399003F633E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				EE34148F268EF3C400149873 /* CGImageExtension.swift */,
+				EE341492268EFCB800149873 /* CGImageSourceExtension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		EEBEE66822A4055D009CF602 = {
