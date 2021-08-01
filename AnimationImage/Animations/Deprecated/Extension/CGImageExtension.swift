@@ -6,12 +6,14 @@
 //  Copyright © 2021 DJ.HAN. All rights reserved.
 //
 
+/*
 import Foundation
 import Cocoa
 
 /**
- # 참고 사항:
- EdgeView 3 의 코드 일부를 그대로 복사해 가져옴.
+ 회전 상태 열거형
+ - Important: 코드 재사용
+ - EdgeView 3 의 코드 일부를 그대로 복사해 가져옴.
  - CommonLibrary에 넣고 싶으나, CommonLibrary가 먼저 AnimationImage를 참고하기 때문에, 어쩔 수 없이 여기에 복사해서 사용한다
  */
 /// 회전 상태
@@ -47,8 +49,8 @@ enum RotationStatus {
 }
 
 /**
- # 참고 사항:
- EdgeView 3 의`CGImageExtenstion`의 코드를 그대로 복사해 가져옴.
+ - Important: 코드 재사용
+ - EdgeView 3 의 코드 일부를 그대로 복사해 가져옴.
  - CommonLibrary에 넣고 싶으나, CommonLibrary가 먼저 AnimationImage를 참고하기 때문에, 어쩔 수 없이 여기에 복사해서 사용한다
  */
 extension CGImage {
@@ -235,3 +237,4 @@ extension CGImage {
         }
     }
 }
+*/

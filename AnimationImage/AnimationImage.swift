@@ -7,16 +7,21 @@
 //
 
 import Cocoa
+import CommonLibrary
 import AnimationImagePrivate
 
-// MARK: - AnimationImage Class
+// MARK: - AnimationImage Class -
 
 /**
  Animation Image Class
  - 애니메이션 이미지 클래스
  */
 public class AnimationImage {
-    // MARK: AnimationImage Enumerations
+    
+    // MARK: - AnimationImage Enumerations
+    
+    // CommonLibrary로 이동
+    /*
     /// 애니메이션 이미지 종류
     public enum type {
         /// GIF
@@ -28,7 +33,7 @@ public class AnimationImage {
         /// Unknown
         case unknown
     }
-
+     */
     /// 각 프레임 별 지연 시간(duration) 저장 딕셔너리
     private lazy var delays = [Int: Float]()
 
@@ -75,7 +80,8 @@ public class AnimationImage {
     /// 이미지 소스
     private var image: DefaultAnimationImage?
     /// 이미지 종류
-    private var type: AnimationImage.type = .unknown
+    //private var type: AnimationImage.type = .unknown
+    private var type: AnimationImageType = .unknown
     /// GIF 이미지 소스
     private var gifImage: GifImage? {
         return image as? GifImage
@@ -128,8 +134,9 @@ public class AnimationImage {
     // 실제 이미지
     //===================================================//
 
-    // MARK: Initialization
-    init(type: AnimationImage.type) {
+    // MARK: - Initialization
+    init(type: AnimationImageType) {
+        //init(type: AnimationImage.type) {
         // 종류 대입
         self.type = type
     }
@@ -139,7 +146,8 @@ public class AnimationImage {
         - url: 애니메이션 파일 URL
         - type: 애니메이션 이미지 종류
      */
-    public convenience init?(from url: URL, type: AnimationImage.type) {
+    public convenience init?(from url: URL, type: AnimationImageType) {
+    //public convenience init?(from url: URL, type: AnimationImage.type) {
         // 종류별로 image를 초기화
         switch type {
         case .gif:
@@ -168,7 +176,8 @@ public class AnimationImage {
         - data: 애니메이션 Data
         - type: 애니메이션 이미지 종류
      */
-    public convenience init?(from data: Data, type: AnimationImage.type) {
+    public convenience init?(from data: Data, type: AnimationImageType) {
+    //public convenience init?(from data: Data, type: AnimationImage.type) {
         // 종류별로 image를 초기화
         switch type {
         case .gif:
@@ -193,7 +202,7 @@ public class AnimationImage {
         }
     }
 
-    // MARK: Method
+    // MARK: - Method
     /// 특정 인덱스의 이미지를 반환
     private func image(at index: Int) -> NSImage? {
         return self.makeImage(from: index)

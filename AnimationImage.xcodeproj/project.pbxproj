@@ -15,6 +15,8 @@
 		EE62C81A256B860100C982E1 /* WebpImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE62C819256B860100C982E1 /* WebpImage.swift */; };
 		EE8F24B122A7351300F9E0BA /* AnimationConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8F24B022A7351300F9E0BA /* AnimationConvertible.swift */; };
 		EE8F24B722A74BBC00F9E0BA /* WebpExImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8F24B622A74BBC00F9E0BA /* WebpExImage.swift */; };
+		EEA6CEF426B6790F00E1D3F2 /* CommonLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEA6CEF226B6790900E1D3F2 /* CommonLibrary.framework */; };
+		EEA6CEF526B6790F00E1D3F2 /* CommonLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EEA6CEF226B6790900E1D3F2 /* CommonLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EEBEE67C22A4055D009CF602 /* AnimationImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEBEE67222A4055D009CF602 /* AnimationImage.framework */; };
 		EEBEE68122A4055D009CF602 /* AnimationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBEE68022A4055D009CF602 /* AnimationImageTests.swift */; };
 		EEBEE68322A4055D009CF602 /* AnimationImage.h in Headers */ = {isa = PBXBuildFile; fileRef = EEBEE67522A4055D009CF602 /* AnimationImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -37,6 +39,20 @@
 			remoteGlobalIDString = EE1DA629224220F90037D00B;
 			remoteInfo = WebpFrameworkTests;
 		};
+		EEA6CEF126B6790900E1D3F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EEA6CEED26B6790900E1D3F2 /* CommonLibrary.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EE625A9624B3041000C66201;
+			remoteInfo = CommonLibrary;
+		};
+		EEA6CEF626B6791600E1D3F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EEA6CEED26B6790900E1D3F2 /* CommonLibrary.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = EE625A9524B3041000C66201;
+			remoteInfo = CommonLibrary;
+		};
 		EEBEE67D22A4055D009CF602 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EEBEE66922A4055D009CF602 /* Project object */;
@@ -53,6 +69,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		EE9AA8C526A7E96900C3A08B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EEA6CEF526B6790F00E1D3F2 /* CommonLibrary.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebpFramework_umbrella.h; sourceTree = "<group>"; };
 		EE1A8EAF22A6777800969F22 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -64,6 +94,7 @@
 		EE62C819256B860100C982E1 /* WebpImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebpImage.swift; sourceTree = "<group>"; };
 		EE8F24B022A7351300F9E0BA /* AnimationConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConvertible.swift; sourceTree = "<group>"; };
 		EE8F24B622A74BBC00F9E0BA /* WebpExImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebpExImage.swift; sourceTree = "<group>"; };
+		EEA6CEED26B6790900E1D3F2 /* CommonLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CommonLibrary.xcodeproj; path = ../CommonLibrary/CommonLibrary.xcodeproj; sourceTree = "<group>"; };
 		EEBEE67222A4055D009CF602 /* AnimationImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AnimationImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEBEE67522A4055D009CF602 /* AnimationImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationImage.h; sourceTree = "<group>"; };
 		EEBEE67622A4055D009CF602 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -79,6 +110,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEC1D5BF2581E5F200FD5DE1 /* WebpFramework.framework in Frameworks */,
+				EEA6CEF426B6790F00E1D3F2 /* CommonLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,7 +133,6 @@
 				EE394D2E22A6969200198FDB /* GifImage.swift */,
 				EE394D3022A6969D00198FDB /* PngImage.swift */,
 				EE8F24B622A74BBC00F9E0BA /* WebpExImage.swift */,
-				EEA32D5B268F3399003F633E /* Extension */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -125,6 +156,7 @@
 		EE62C874256B8D3000C982E1 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				EEA32D5B268F3399003F633E /* Extension */,
 				EE62C819256B860100C982E1 /* WebpImage.swift */,
 			);
 			path = Deprecated;
@@ -139,6 +171,14 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		EEA6CEEE26B6790900E1D3F2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EEA6CEF226B6790900E1D3F2 /* CommonLibrary.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		EEBEE66822A4055D009CF602 = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +187,7 @@
 				EEBEE67322A4055D009CF602 /* Products */,
 				EE5FA62422A52409006FD036 /* Frameworks */,
 				EE4EF7F02581E5910001A073 /* WebpFramework.xcodeproj */,
+				EEA6CEED26B6790900E1D3F2 /* CommonLibrary.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -204,10 +245,12 @@
 				EEBEE66E22A4055D009CF602 /* Sources */,
 				EEBEE66F22A4055D009CF602 /* Frameworks */,
 				EEBEE67022A4055D009CF602 /* Resources */,
+				EE9AA8C526A7E96900C3A08B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EEA6CEF726B6791600E1D3F2 /* PBXTargetDependency */,
 				EEC1D5BC2581E5EC00FD5DE1 /* PBXTargetDependency */,
 			);
 			name = AnimationImage;
@@ -265,6 +308,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = EEA6CEEE26B6790900E1D3F2 /* Products */;
+					ProjectRef = EEA6CEED26B6790900E1D3F2 /* CommonLibrary.xcodeproj */;
+				},
+				{
 					ProductGroup = EE4EF7F12581E5910001A073 /* Products */;
 					ProjectRef = EE4EF7F02581E5910001A073 /* WebpFramework.xcodeproj */;
 				},
@@ -290,6 +337,13 @@
 			fileType = wrapper.cfbundle;
 			path = WebpFrameworkTests.xctest;
 			remoteRef = EE4EF7F72581E5910001A073 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EEA6CEF226B6790900E1D3F2 /* CommonLibrary.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CommonLibrary.framework;
+			remoteRef = EEA6CEF126B6790900E1D3F2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -338,6 +392,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		EEA6CEF726B6791600E1D3F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CommonLibrary;
+			targetProxy = EEA6CEF626B6791600E1D3F2 /* PBXContainerItemProxy */;
+		};
 		EEBEE67E22A4055D009CF602 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EEBEE67122A4055D009CF602 /* AnimationImage */;
@@ -499,7 +558,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MODULEMAP_FILE = "";
 				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.djhan.AnimationImage;
@@ -536,7 +595,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MODULEMAP_FILE = "";
 				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.djhan.AnimationImage;

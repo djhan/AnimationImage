@@ -8,10 +8,11 @@
 
 import Foundation
 import Cocoa
+import CommonLibrary
 import AnimationImagePrivate
 
 
-// MARK: Typealiases
+// MARK: - Typealiases -
 
 /// EXIF Properties 배열
 public typealias AnimationExifData = Array<AnimationExifProperties>
@@ -19,7 +20,7 @@ public typealias AnimationExifData = Array<AnimationExifProperties>
 public typealias AnimationExifProperties = Dictionary<String, Any>
 
 
-// MARK: Animation Convertible Protocol
+// MARK: - Animation Convertible Protocol -
 /**
  Animation Convertible 프로토콜
 
@@ -41,7 +42,8 @@ public protocol AnimationConvertible: AnyObject, Collection {
 
     /** DefaultAnimationImage 클래스에서 선언 */
     /// type
-    var type: AnimationImage.type { get }
+    var type: AnimationImageType { get }
+    //var type: AnimationImage.type { get }
     /// 크기
     var size: NSSize { get set }
     /// 애니메이션 여부
@@ -52,13 +54,12 @@ public protocol AnimationConvertible: AnyObject, Collection {
     func delayTime(at index: Index)-> Float
 }
 
-// MARK: Animation Convertible Extension
+// MARK: - Animation Convertible Extension
 extension AnimationConvertible {
     /**
      imageSource를 cgImageSource로 캐스팅해서 반환 (가능한 경우)
      
-     # 참고사항
-     - Core Foundation 변수가 opaque 타입이기 때문에 as 를 이용한 CF 타입 -> swift 타입 다운캐스팅에 문제가 있음. 따라서 이 같은 처리가 필요
+     - Note: Core Foundation 변수가 opaque 타입이기 때문에 as 를 이용한 CF 타입 -> swift 타입 다운캐스팅에 문제가 있음. 따라서 이 같은 처리가 필요
      */
     private var castedCGImageSource: CGImageSource? {
         if self.imageSource != nil {
@@ -204,8 +205,8 @@ extension AnimationConvertible {
     /**
      EXIF Property 기준으로 orientation 전환된 NSImage 반환
 
-     # 참고사항:
-     EdgeView 3 의`CGImageExtenstion`의 코드를 그대로 복사해 가져옴.
+     - Important: 재활용된 코드
+     - EdgeView 3 의`CGImageExtenstion`의 코드를 그대로 복사해 가져옴.
      - CommonLibrary에 넣고 싶으나, CommonLibrary가 먼저 AnimationImage를 참고하기 때문에, 어쩔 수 없이 여기에 복사해서 사용한다
 
      - Parameters:
@@ -234,12 +235,13 @@ extension AnimationConvertible {
     }
 }
 
-// MARK: - Default Animation Image Class for Identification
+// MARK: - Default Animation Image Class for Identification -
 public class DefaultAnimationImage {
     // Dummy Class로 선언됨
     
     /// type
-    var type: AnimationImage.type = .unknown
+    var type: AnimationImageType = .unknown
+    //var type: AnimationImage.type = .unknown
     /// 크기: NSZeroSize로 초기화
     public var size: NSSize = NSZeroSize
     /// 반복 횟수 = 0으로 초기화
