@@ -177,7 +177,6 @@ public class AnimationImage {
         - type: 애니메이션 이미지 종류
      */
     public convenience init?(from data: Data, type: AnimationImageType) {
-    //public convenience init?(from data: Data, type: AnimationImage.type) {
         // 종류별로 image를 초기화
         switch type {
         case .gif:
