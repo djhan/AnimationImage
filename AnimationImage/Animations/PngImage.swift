@@ -43,11 +43,7 @@ class PngImage: DefaultAnimationImage, AnimationConvertible {
     private var _imageSource: CGImageSource?
     
     /// ExifData
-    var exifData: AnimationExifData?/* {
-        didSet {
-            print("exif 변경")
-        }
-    }*/
+    var exifData: AnimationExifData?
 
     /// webpImage 프로퍼티: 사용하지 않음
     internal var webpImage: WebpImage?

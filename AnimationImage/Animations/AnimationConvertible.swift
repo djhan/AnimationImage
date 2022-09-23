@@ -43,7 +43,6 @@ public protocol AnimationConvertible: AnyObject, Collection {
     /** DefaultAnimationImage 클래스에서 선언 */
     /// type
     var type: AnimationImageType { get }
-    //var type: AnimationImage.type { get }
     /// 크기
     var size: NSSize { get set }
     /// 애니메이션 여부
@@ -78,7 +77,6 @@ extension AnimationConvertible {
         if self.type == .unknown { return nil }
         // imageSource가 제대로 설정되지 않은 경우 중지
         guard let imageSource = self.castedCGImageSource else { return nil }
-        //guard let imageSource = self.imageSource else { return nil }
         // Metadata Dictionaries Key를 설정
         let metadadaKey = self.type == .gif ? kCGImagePropertyGIFDictionary as NSString : kCGImagePropertyPNGDictionary as NSString
         // Metadata Dictionaries 를 설정
@@ -241,7 +239,6 @@ public class DefaultAnimationImage {
     
     /// type
     var type: AnimationImageType = .unknown
-    //var type: AnimationImage.type = .unknown
     /// 크기: NSZeroSize로 초기화
     public var size: NSSize = NSZeroSize
     /// 반복 횟수 = 0으로 초기화

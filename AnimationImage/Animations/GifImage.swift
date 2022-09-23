@@ -10,7 +10,7 @@ import Cocoa
 import CommonLibrary
 import AnimationImagePrivate
 
-// MARK: - GIFImageClass -
+// MARK: - GIF Image Class -
 /**
  GIF Image Class
  - AnimationConvertible 프로토콜 상속 (자동으로 collection 프로토콜도 상속)

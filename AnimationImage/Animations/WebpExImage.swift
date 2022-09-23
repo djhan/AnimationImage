@@ -10,6 +10,7 @@ import Cocoa
 import CommonLibrary
 import AnimationImagePrivate
 
+// MARK: - Webp Image Class -
 //================================================================================//
 //
 // Webp Extended Image Class - Objective C 코드의 Wrapper로 작동
