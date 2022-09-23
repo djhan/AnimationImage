@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE0B1C4F28DD344B00C52EF0 /* SDWebImageAVIFCoder in Frameworks */ = {isa = PBXBuildFile; productRef = EE0B1C4E28DD344B00C52EF0 /* SDWebImageAVIFCoder */; };
 		EE1A8EAE22A676CD00969F22 /* WebpFramework_umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */; };
 		EE341490268EF3C400149873 /* CGImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE34148F268EF3C400149873 /* CGImageExtension.swift */; };
 		EE341493268EFCB800149873 /* CGImageSourceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE341492268EFCB800149873 /* CGImageSourceExtension.swift */; };
@@ -110,6 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEC1D5BF2581E5F200FD5DE1 /* WebpFramework.framework in Frameworks */,
+				EE0B1C4F28DD344B00C52EF0 /* SDWebImageAVIFCoder in Frameworks */,
 				EEA6CEF426B6790F00E1D3F2 /* CommonLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,6 +256,9 @@
 				EEC1D5BC2581E5EC00FD5DE1 /* PBXTargetDependency */,
 			);
 			name = AnimationImage;
+			packageProductDependencies = (
+				EE0B1C4E28DD344B00C52EF0 /* SDWebImageAVIFCoder */,
+			);
 			productName = AnimationImage;
 			productReference = EEBEE67222A4055D009CF602 /* AnimationImage.framework */;
 			productType = "com.apple.product-type.framework";
@@ -304,6 +309,9 @@
 				Base,
 			);
 			mainGroup = EEBEE66822A4055D009CF602;
+			packageReferences = (
+				EE0B1C4D28DD344B00C52EF0 /* XCRemoteSwiftPackageReference "SDWebImageAVIFCoder" */,
+			);
 			productRefGroup = EEBEE67322A4055D009CF602 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -464,7 +472,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -524,7 +532,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -677,6 +685,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EE0B1C4D28DD344B00C52EF0 /* XCRemoteSwiftPackageReference "SDWebImageAVIFCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageAVIFCoder.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EE0B1C4E28DD344B00C52EF0 /* SDWebImageAVIFCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE0B1C4D28DD344B00C52EF0 /* XCRemoteSwiftPackageReference "SDWebImageAVIFCoder" */;
+			productName = SDWebImageAVIFCoder;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EEBEE66922A4055D009CF602 /* Project object */;
 }
