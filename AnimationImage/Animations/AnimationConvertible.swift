@@ -108,25 +108,44 @@ extension AnimationConvertible {
     /// 프레임 갯수 반환 내부 private 메쏘드
     /// - syncQueue 동기화를 위해서 내부에서만 사용한다
     private var _frameCount: Int {
-        // webp 인 경우
-        if self.type == .webp {
+        switch self.type {
+            // WebP
+        case .webp:
             // imageSource가 없을 떄는 0 반환
             guard let webpImage = self.imageSource as? WebpImage else {
                 return 0
             }
             return Int(webpImage.frameCount)
-            
-        }
-            // GIF/PNG 인 경우
-        else if self.type == .gif || self.type == .png {
+
+            // GIF 또는 PNG
+        case .gif, .png:
             // imageSource가 없을 떄는 0 반환
             guard let imageSource = self.castedCGImageSource else {
                 return 0
             }
             return CGImageSourceGetCount(imageSource)
+            
+            // AVIF
+        case .avif:
+            guard let avifImage = self as? AvifImage else {
+                return 0
+            }
+            return avifImage.numberOfItems
+
+            // 그 외
+        default: return 0
+        }
+        /*
+        // webp 인 경우
+        if self.type == .webp {
+            
+        }
+            // GIF/PNG 인 경우
+        else if self.type == .gif || self.type == .png {
         }
         // 그 외의 경우
         return 0
+         */
     }
 
     /// 특정 인덱스의 ExifProperties
@@ -170,6 +189,31 @@ extension AnimationConvertible {
             }
             
             var cgImage: CGImage?
+            switch strongSelf.type {
+                // webp 인 경우
+            case .webp:
+                guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
+                // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
+                // new로 생성된 것이 아니기 때문에, unretained로 처리
+                cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
+
+                // GIF/PNG 인 경우
+            case .gif, .png:
+                guard let imageSource = strongSelf.castedCGImageSource else { return nil }
+                cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
+                
+                // avif인 경우
+            case .avif:
+                guard let avifImage = self as? AvifImage else { return nil }
+                // NSImage를 그대로 반환
+                return avifImage.image(at: index)
+                
+                // 그 외
+            default:
+                return nil
+            }
+
+            /*
             // webp 인 경우
             if strongSelf.type == .webp {
                 guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
@@ -181,7 +225,7 @@ extension AnimationConvertible {
             else if strongSelf.type == .gif || strongSelf.type == .png {
                 guard let imageSource = strongSelf.castedCGImageSource else { return nil }
                 cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
-            }
+            }*/
             
             // cgImage를 정상적으로 받았는지 확인
             guard cgImage != nil else { return nil }

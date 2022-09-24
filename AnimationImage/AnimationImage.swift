@@ -34,6 +34,8 @@ public class AnimationImage {
         case unknown
     }
      */
+    
+    // MARK: - Properties
     /// 각 프레임 별 지연 시간(duration) 저장 딕셔너리
     private lazy var delays = [Int: Float]()
 
@@ -50,6 +52,8 @@ public class AnimationImage {
             count = self.pngImage?.count
         case .webp:
             count = self.webpImage?.count
+        case .avif:
+            count = self.avifImage?.count
         default:
             return 0
         }
@@ -68,6 +72,8 @@ public class AnimationImage {
             loopCount = self.pngImage?.loopCount
         case .webp:
             loopCount = self.webpImage?.loopCount
+        case .avif:
+            loopCount = self.avifImage?.loopCount
         default:
             return 0
         }
@@ -94,7 +100,11 @@ public class AnimationImage {
     private var webpImage: WebpExImage? {
         return image as? WebpExImage
     }
-    
+    /// avif 이미지 소스
+    private var avifImage: AvifImage? {
+        return image as? AvifImage
+    }
+
     /// 애니메이션 이미지 여부
     public var isAnimation: Bool {
         // 이미지 개수가 1개 이상인 경우 true 반환
@@ -147,24 +157,32 @@ public class AnimationImage {
         - type: 애니메이션 이미지 종류
      */
     public convenience init?(from url: URL, type: AnimationImageType) {
-    //public convenience init?(from url: URL, type: AnimationImage.type) {
         // 종류별로 image를 초기화
         switch type {
+        // GIF
         case .gif:
             guard let image = GifImage.init(from: url) else { return nil }
-            // 초기화 실행
             self.init(type: type)
             self.image = image
+        
+        // PNG
         case .png:
             guard let image = PngImage.init(from: url) else { return nil }
-            // 초기화 실행
             self.init(type: type)
             self.image = image
+        
+        // WebP
         case .webp:
             guard let image = WebpExImage.init(from: url) else { return nil }
-            // 초기화 실행
             self.init(type: type)
             self.image = image
+        
+        // AVIF
+        case .avif:
+            guard let image = AvifImage.init(from: url) else { return nil }
+            self.init(type: type)
+            self.image = image
+            
         case .unknown:
             // 초기화 중지
             return nil
@@ -179,22 +197,33 @@ public class AnimationImage {
     public convenience init?(from data: Data, type: AnimationImageType) {
         // 종류별로 image를 초기화
         switch type {
+            // GIF
         case .gif:
             guard let image = GifImage.init(from: data) else { return nil }
             // 초기화 실행
             self.init(type: type)
             self.image = image
+            
+            // PNG
         case .png:
             guard let image = PngImage.init(from: data) else { return nil }
             // 초기화 실행
             self.init(type: type)
             self.image = image
+            
+            // Webp
         case .webp:
-            //guard let image = WebpExImage.init(from: data) else { return nil }
             let image = WebpExImage.init(from: data)
             // 초기화 실행
             self.init(type: type)
             self.image = image
+
+            // AVIF
+        case .avif:
+            guard let image = AvifImage.init(from: data) else { return nil }
+            self.init(type: type)
+            self.image = image
+
         case .unknown:
             // 초기화 중지
             return nil
@@ -212,15 +241,26 @@ public class AnimationImage {
         // 반환용 이미지
         var image: NSImage?
         switch self.type {
+            // GIF
         case .gif:
             guard let gifImage = self.gifImage else { return nil }
             image = gifImage[index]
+            
+            // PNG
         case .png:
             guard let pngImage = self.pngImage else { return nil }
             image = pngImage[index]
+            
+            // Webp
         case .webp:
             guard let webpImage = self.webpImage else { return nil }
             image = webpImage[index]
+            
+            // AVIF
+        case .avif:
+            guard let avifImage = self.avifImage else { return nil }
+            image = avifImage[index]
+            
         case .unknown:
             return nil
         }
@@ -252,6 +292,8 @@ public class AnimationImage {
             delay = self.pngImage?.delayTime(at: index)
         case .webp:
             delay = self.webpImage?.delayTime(at: index)
+        case .avif:
+            delay = self.avifImage?.delayTime(at: index)
         default:
             return 0.1
         }
