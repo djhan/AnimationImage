@@ -135,17 +135,6 @@ extension AnimationConvertible {
             // 그 외
         default: return 0
         }
-        /*
-        // webp 인 경우
-        if self.type == .webp {
-            
-        }
-            // GIF/PNG 인 경우
-        else if self.type == .gif || self.type == .png {
-        }
-        // 그 외의 경우
-        return 0
-         */
     }
 
     /// 특정 인덱스의 ExifProperties
@@ -212,20 +201,6 @@ extension AnimationConvertible {
             default:
                 return nil
             }
-
-            /*
-            // webp 인 경우
-            if strongSelf.type == .webp {
-                guard let webpImage = strongSelf.imageSource as? WebpImage else { return nil }
-                // Objective C로부터의 반환값이라서 Unmanaged로 넘어온다
-                // new로 생성된 것이 아니기 때문에, unretained로 처리
-                cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
-            }
-            // GIF/PNG 인 경우
-            else if strongSelf.type == .gif || strongSelf.type == .png {
-                guard let imageSource = strongSelf.castedCGImageSource else { return nil }
-                cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
-            }*/
             
             // cgImage를 정상적으로 받았는지 확인
             guard cgImage != nil else { return nil }
