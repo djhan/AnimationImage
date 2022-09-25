@@ -57,6 +57,12 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
         }
         // 정상적으로 초기화
         self.init(from: imageSource)
+        
+        // MacOS 13.0 ventura 이상인 경우 exifData 생성 시도
+        if #available(macOS 13.0, *),
+           let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) {
+            self.exifData = imageSource.exifData
+        }
     }
     
     /// Data로 초기화
@@ -68,6 +74,12 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
         }
         // 정상적으로 초기화
         self.init(from: imageSource)
+        
+        // MacOS 13.0 ventura 이상인 경우 exifData 생성 시도
+        if #available(macOS 13.0, *),
+           let imageSource = CGImageSourceCreateWithData(data as CFData, nil) {
+            self.exifData = imageSource.exifData
+        }
     }
     
     /// 지연 시간

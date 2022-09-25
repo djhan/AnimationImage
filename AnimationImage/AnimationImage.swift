@@ -127,6 +127,7 @@ public class AnimationImage {
             case .gif: return self.gifImage?.exifData
             case .png: return self.pngImage?.exifData
             case .webp: return self.webpImage?.exifData
+            case .avif: return self.avifImage?.exifData
             default: return nil
             }
         }
@@ -135,6 +136,7 @@ public class AnimationImage {
             case .gif: self.gifImage?.exifData = newValue
             case .png: self.pngImage?.exifData = newValue
             case .webp: self.webpImage?.exifData = newValue
+            case .avif: self.avifImage?.exifData = newValue
             default: return
             }
         }
