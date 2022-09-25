@@ -77,34 +77,33 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
     
     /// Data로 초기화
     convenience init?(from data: Data) {
-        
         // 이미지 소스 생성
-        if let imageSource = SDImageAVIFCoder.init(animatedImageData: data) {
-            // 정상적으로 초기화
-            self.init(from: imageSource)
-            
-            // MacOS 13.0 ventura 이상인 경우 exifData 생성 시도
-            if #available(macOS 13.0, *),
-               let imageSource = CGImageSourceCreateWithData(data as CFData, nil) {
-                self.exifData = imageSource.exifData
-            }
-        }
-        else {
+        guard let imageSource = SDImageAVIFCoder.init(animatedImageData: data) else {
             os_log("AvifImage>%@ :: AVIF 이미지소스 생성 실패...", log: .fileIO, type: .error, #function)
-            // MacOS 13.0 ventura 이상인 경우
-            if #available(macOS 13.0, *),
-               let image = NSImage.init(data: data) {
-                os_log("AvifImage>%@ ::ventura 대응 시도 성공", log: .fileIO, type: .error, #function)
-                // 초기화
-                self.init(from: nil, subImage: image)
-                // exif data 추가
-                let imageSource = CGImageSourceCreateWithData(data as CFData, nil)
-                self.exifData = imageSource?.exifData
-            }
-            else {
+            // MacOS 13.0 ventura 이상인지 확인
+            guard #available(macOS 13.0, *),
+               let image = NSImage.init(data: data),
+                  image.size.width > 0, image.size.height > 0 else {
                 os_log("AvifImage>%@ ::초기화 실패...", log: .fileIO, type: .error, #function)
                 return nil
             }
+            
+            os_log("AvifImage>%@ ::ventura 대응 시도 성공. w/h = %f/%f", log: .fileIO, type: .debug, #function, image.size.width, image.size.height)
+            // 초기화
+            self.init(from: nil, subImage: image)
+            // exif data 추가
+            let imageSource = CGImageSourceCreateWithData(data as CFData, nil)
+            self.exifData = imageSource?.exifData
+            return
+        }
+
+        // 정상적으로 초기화
+        self.init(from: imageSource)
+        
+        // MacOS 13.0 ventura 이상인 경우 exifData 생성 시도
+        if #available(macOS 13.0, *),
+           let imageSource = CGImageSourceCreateWithData(data as CFData, nil) {
+            self.exifData = imageSource.exifData
         }
     }
     
