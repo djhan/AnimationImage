@@ -6,6 +6,10 @@
 //  Copyright © 2022 DJ.HAN. All rights reserved.
 //
 
+
+/// 특허 라이센스 문제로 비활성화 2022/10/03
+
+/*
 import Foundation
 import CommonLibrary
 import os.log
@@ -123,3 +127,4 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
         return imageSource.animatedImageFrame(at: UInt(index))
     }
 }
+*/

@@ -52,8 +52,10 @@ public class AnimationImage {
             count = self.pngImage?.count
         case .webp:
             count = self.webpImage?.count
+            /*
         case .avif:
             count = self.avifImage?.count
+             */
         default:
             return 0
         }
@@ -72,8 +74,10 @@ public class AnimationImage {
             loopCount = self.pngImage?.loopCount
         case .webp:
             loopCount = self.webpImage?.loopCount
+            /*
         case .avif:
             loopCount = self.avifImage?.loopCount
+             */
         default:
             return 0
         }
@@ -100,10 +104,12 @@ public class AnimationImage {
     private var webpImage: WebpExImage? {
         return image as? WebpExImage
     }
+    /*
     /// avif 이미지 소스
     private var avifImage: AvifImage? {
         return image as? AvifImage
     }
+     */
 
     /// 애니메이션 이미지 여부
     public var isAnimation: Bool {
@@ -127,7 +133,7 @@ public class AnimationImage {
             case .gif: return self.gifImage?.exifData
             case .png: return self.pngImage?.exifData
             case .webp: return self.webpImage?.exifData
-            case .avif: return self.avifImage?.exifData
+            //case .avif: return self.avifImage?.exifData
             default: return nil
             }
         }
@@ -136,7 +142,7 @@ public class AnimationImage {
             case .gif: self.gifImage?.exifData = newValue
             case .png: self.pngImage?.exifData = newValue
             case .webp: self.webpImage?.exifData = newValue
-            case .avif: self.avifImage?.exifData = newValue
+            //case .avif: self.avifImage?.exifData = newValue
             default: return
             }
         }
@@ -178,13 +184,13 @@ public class AnimationImage {
             guard let image = WebpExImage.init(from: url) else { return nil }
             self.init(type: type)
             self.image = image
-        
+        /*
         // AVIF
         case .avif:
             guard let image = AvifImage.init(from: url) else { return nil }
             self.init(type: type)
             self.image = image
-            
+          */
         case .unknown:
             // 초기화 중지
             return nil
@@ -219,13 +225,13 @@ public class AnimationImage {
             // 초기화 실행
             self.init(type: type)
             self.image = image
-
+            /*
             // AVIF
         case .avif:
             guard let image = AvifImage.init(from: data) else { return nil }
             self.init(type: type)
             self.image = image
-
+             */
         case .unknown:
             // 초기화 중지
             return nil
@@ -257,12 +263,12 @@ public class AnimationImage {
         case .webp:
             guard let webpImage = self.webpImage else { return nil }
             image = webpImage[index]
-            
+            /*
             // AVIF
         case .avif:
             guard let avifImage = self.avifImage else { return nil }
             image = avifImage[index]
-            
+            */
         case .unknown:
             return nil
         }
@@ -294,8 +300,10 @@ public class AnimationImage {
             delay = self.pngImage?.delayTime(at: index)
         case .webp:
             delay = self.webpImage?.delayTime(at: index)
+            /*
         case .avif:
             delay = self.avifImage?.delayTime(at: index)
+             */
         default:
             return 0.1
         }
