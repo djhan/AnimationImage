@@ -8,8 +8,8 @@
 
 
 /// 특허 라이센스 문제로 비활성화 2022/10/03
+/// ventura 릴리즈로 ventura 이상에서만 작동되게 활성화 2022/10/27
 
-/*
 import Foundation
 import CommonLibrary
 import os.log
@@ -127,4 +127,3 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
         return imageSource.animatedImageFrame(at: UInt(index))
     }
 }
-*/

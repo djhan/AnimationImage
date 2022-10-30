@@ -124,14 +124,14 @@ extension AnimationConvertible {
                 return 0
             }
             return CGImageSourceGetCount(imageSource)
-           /*
+
             // AVIF
         case .avif:
             guard let avifImage = self as? AvifImage else {
                 return 0
             }
             return avifImage.numberOfItems
-            */
+
             // 그 외
         default: return 0
         }
@@ -190,13 +190,13 @@ extension AnimationConvertible {
             case .gif, .png:
                 guard let imageSource = strongSelf.castedCGImageSource else { return nil }
                 cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
-                /*
+
                 // avif인 경우
             case .avif:
                 guard let avifImage = self as? AvifImage else { return nil }
                 // NSImage를 그대로 반환
                 return avifImage.image(at: index)
-                */
+
                 // 그 외
             default:
                 return nil
