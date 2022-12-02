@@ -18,7 +18,6 @@
 		EE8F24B122A7351300F9E0BA /* AnimationConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8F24B022A7351300F9E0BA /* AnimationConvertible.swift */; };
 		EE8F24B722A74BBC00F9E0BA /* WebpExImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8F24B622A74BBC00F9E0BA /* WebpExImage.swift */; };
 		EEA6CEF426B6790F00E1D3F2 /* CommonLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEA6CEF226B6790900E1D3F2 /* CommonLibrary.framework */; };
-		EEA6CEF526B6790F00E1D3F2 /* CommonLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EEA6CEF226B6790900E1D3F2 /* CommonLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EEBEE67C22A4055D009CF602 /* AnimationImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEBEE67222A4055D009CF602 /* AnimationImage.framework */; };
 		EEBEE68122A4055D009CF602 /* AnimationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBEE68022A4055D009CF602 /* AnimationImageTests.swift */; };
 		EEBEE68322A4055D009CF602 /* AnimationImage.h in Headers */ = {isa = PBXBuildFile; fileRef = EEBEE67522A4055D009CF602 /* AnimationImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -70,20 +69,6 @@
 			remoteInfo = WebpFramework;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		EE9AA8C526A7E96900C3A08B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				EEA6CEF526B6790F00E1D3F2 /* CommonLibrary.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		EE0B1CC628DD90E600C52EF0 /* AvifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvifImage.swift; sourceTree = "<group>"; };
@@ -250,7 +235,6 @@
 				EEBEE66E22A4055D009CF602 /* Sources */,
 				EEBEE66F22A4055D009CF602 /* Frameworks */,
 				EEBEE67022A4055D009CF602 /* Resources */,
-				EE9AA8C526A7E96900C3A08B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
