@@ -51,7 +51,15 @@ class WebpExImage: DefaultAnimationImage, AnimationConvertible {
      - let으로 선언된 내부 프로퍼티 `_syncQueue`를 반환해서 사용하도록 변경한다
      */
     internal var syncQueue: DispatchQueue { return self._syncQueue }
-    private let _syncQueue = DispatchQueue(label: "djhan.EdgeView.WebpExImage", attributes: .concurrent)
+    private let _syncQueue = { let syncQueue = DispatchQueue(label: "djhan.EdgeView.WebpExImage_" + UUID().uuidString,
+                                                             qos: .default,
+                                                             attributes: .concurrent,
+                                                             autoreleaseFrequency: .workItem,
+                                                             target: nil)
+        // 동일 큐 판별을 위해 등록 처리
+        DispatchQueue.registerDetection(of: syncQueue)
+        return syncQueue
+    }()
 
     // MARK: Initialization
     /// 초기화
