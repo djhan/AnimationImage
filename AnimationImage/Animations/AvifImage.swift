@@ -12,7 +12,6 @@
 
 import Foundation
 import CommonLibrary
-import os.log
 import AnimationImagePrivate
 import SDWebImageAVIFCoder
 
@@ -74,7 +73,9 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
             self.init(from: data)
         }
         catch {
-            os_log("AvifImage>%@ :: %@ >> Data 생성 실패. 에러 = %@", log: .fileIO, type: .error, #function, url.path, error.localizedDescription)
+            if #available(macOS 11.0, *) {
+                EdgeLogger.shared.log(loggerMessage: "Data 생성 실패. 에러 = \(error.localizedDescription).", category: .imageIO, type: .error, function: #function)
+            }
             return nil
         }
     }
@@ -83,16 +84,21 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
     convenience init?(from data: Data) {
         // 이미지 소스 생성
         guard let imageSource = SDImageAVIFCoder.init(animatedImageData: data) else {
-            os_log("AvifImage>%@ :: AVIF 이미지소스 생성 실패...", log: .fileIO, type: .error, #function)
+            if #available(macOS 11.0, *) {
+                EdgeLogger.shared.log(loggerMessage: "AVIF 이미지소스 생성 실패.", category: .imageIO, type: .error, function: #function)
+            }
+            
             // MacOS 13.0 ventura 이상인지 확인
             guard #available(macOS 13.0, *),
                let image = NSImage.init(data: data),
                   image.size.width > 0, image.size.height > 0 else {
-                os_log("AvifImage>%@ ::초기화 실패...", log: .fileIO, type: .error, #function)
+                if #available(macOS 11.0, *) {
+                    EdgeLogger.shared.log(loggerMessage: "초기화 실패.", category: .imageIO, type: .error, function: #function)
+                }
                 return nil
             }
             
-            os_log("AvifImage>%@ ::ventura 대응 시도 성공. w/h = %f/%f", log: .fileIO, type: .debug, #function, image.size.width, image.size.height)
+            EdgeLogger.shared.log(loggerMessage: "Ventura 이상의 OS. w/h = \(image.size.width)/\(image.size.height).", category: .imageIO, type: .debug, function: #function)
             // 초기화
             self.init(from: nil, subImage: image)
             // exif data 추가
