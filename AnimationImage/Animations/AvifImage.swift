@@ -74,7 +74,7 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
         }
         catch {
             if #available(macOS 11.0, *) {
-                EdgeLogger.shared.imageIOLogger.log(level: .error, "Data 생성 실패. 에러 = \(error.localizedDescription).")
+                EdgeLogger.shared.imageIOLogger.log(level: .error, "\(#function) :: Data 생성 실패. 에러 = \(error.localizedDescription).")
             }
             return nil
         }
@@ -85,7 +85,7 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
         // 이미지 소스 생성
         guard let imageSource = SDImageAVIFCoder.init(animatedImageData: data) else {
             if #available(macOS 11.0, *) {
-                EdgeLogger.shared.imageIOLogger.log(level: .error, "AVIF 이미지소스 생성 실패.")
+                EdgeLogger.shared.imageIOLogger.log(level: .error, "\(#function) :: AVIF 이미지소스 생성 실패.")
             }
             
             // MacOS 13.0 ventura 이상인지 확인
@@ -93,12 +93,12 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
                   let image = NSImage.init(data: data),
                   image.size.width > 0, image.size.height > 0 else {
                 if #available(macOS 11.0, *) {
-                    EdgeLogger.shared.imageIOLogger.log(level: .error, "초기화 실패.")
+                    EdgeLogger.shared.imageIOLogger.log(level: .error, "\(#function) :: 초기화 실패.")
                 }
                 return nil
             }
             
-            EdgeLogger.shared.imageIOLogger.log(level: .debug, "Ventura 이상의 OS. w/h = \(image.size.width)/\(image.size.height).")
+            EdgeLogger.shared.imageIOLogger.log(level: .debug, "\(#function) :: Ventura 이상의 OS. w/h = \(image.size.width)/\(image.size.height).")
             // 초기화
             self.init(from: nil, subImage: image)
             // exif data 추가
