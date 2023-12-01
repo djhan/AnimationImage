@@ -17,24 +17,7 @@ import AnimationImagePrivate
  - 애니메이션 이미지 클래스
  */
 public class AnimationImage {
-    
-    // MARK: - AnimationImage Enumerations
-    
-    // CommonLibrary로 이동
-    /*
-    /// 애니메이션 이미지 종류
-    public enum type {
-        /// GIF
-        case gif
-        /// PNG
-        case png
-        /// WEBP
-        case webp
-        /// Unknown
-        case unknown
-    }
-     */
-    
+        
     // MARK: - Properties
     /// 각 프레임 별 지연 시간(duration) 저장 딕셔너리
     private lazy var delays = [Int: Float]()

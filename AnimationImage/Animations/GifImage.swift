@@ -45,8 +45,6 @@ class GifImage: DefaultAnimationImage, AnimationConvertible {
     /// ExifData
     var exifData: AnimationExifData?
 
-    /// webpImage 프로퍼티: 사용하지 않음
-    internal var webpImage: WebpImage?
     /**
     동기화 큐
 
