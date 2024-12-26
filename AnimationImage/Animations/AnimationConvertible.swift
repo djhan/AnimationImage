@@ -213,7 +213,7 @@ extension AnimationConvertible {
             
             // PNG / webP 파일은 현재 Orientation에 맞춰서 변환, 반환
             if strongSelf.type == .png || strongSelf.type == .webp {
-                image = strongSelf.transfromBy(strongSelf.orientationByMetadata(at: index), cgImage: cgImage!)
+                image = strongSelf.transformBy(strongSelf.orientationByMetadata(at: index), cgImage: cgImage!)
             }
             // 그 외의 경우는 그대로 반환
             else {
@@ -225,19 +225,14 @@ extension AnimationConvertible {
         return image
     }
     
-    /**
-     EXIF Property 기준으로 orientation 전환된 NSImage 반환
-
-     - Important: 재활용된 코드
-     - EdgeView 3 의`CGImageExtenstion`의 코드를 그대로 복사해 가져옴.
-     - CommonLibrary에 넣고 싶으나, CommonLibrary가 먼저 AnimationImage를 참고하기 때문에, 어쩔 수 없이 여기에 복사해서 사용한다
-
-     - Parameters:
-        - orientation: 회전/반전 여부. CGImagePropertyOrientation 값
-        - cgImage: `CGImage`
-     - Returns: NSImage. 실패시 NIL 반환
-     */
-    private func transfromBy(_ orientation: CGImagePropertyOrientation, cgImage: CGImage) -> NSImage? {
+    /// EXIF Property 기준으로 orientation 전환된 NSImage 반환
+    /// - Important: EdgeView 3 의`CGImageExtenstion`의 코드를 그대로 복사해 가져온 재활용 코드다.
+    /// CommonLibrary에 넣고 싶으나, CommonLibrary가 먼저 AnimationImage를 참고하기 때문에, 어쩔 수 없이 여기에 복사해서 사용한다
+    /// - Parameters:
+    ///     - orientation: 회전/반전 여부. `CGImagePropertyOrientation` 값
+    ///     - cgImage: `CGImage`
+    /// - Returns: `NSImage`. 실패시 NIL 반환
+    private func transformBy(_ orientation: CGImagePropertyOrientation, cgImage: CGImage) -> NSImage? {
         
         //----------------------------------------------------------------------------//
         /// CGImage를 NSImage로 반환하는 내부 메쏘드
@@ -253,7 +248,7 @@ extension AnimationConvertible {
         }
         
         // up 이외의 방향인 경우
-        guard let transformedCGImage = cgImage.transfrom(orientation: orientation) else { return nil }
+        guard let transformedCGImage = cgImage.transform(orientation: orientation) else { return nil }
         return convertedImage(transformedCGImage)
     }
 }

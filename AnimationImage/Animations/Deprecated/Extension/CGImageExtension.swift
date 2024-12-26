@@ -106,7 +106,7 @@ extension CGImage {
     /// - Parameters:
     ///     - orientation: CGImage 기반 방향값
     /// - Returns: CGImage. 옵셔널
-    func transfrom(orientation: CGImagePropertyOrientation) -> CGImage? {
+    func transform(orientation: CGImagePropertyOrientation) -> CGImage? {
         return autoreleasepool { [unowned self] () -> CGImage? in
             
             var transformImage: CGImage?
