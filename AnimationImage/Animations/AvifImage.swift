@@ -12,7 +12,6 @@
 
 import Foundation
 import CommonLibrary
-import AnimationImagePrivate
 import SDWebImageAVIFCoder
 
 // MARK: - AVIF Image Class -

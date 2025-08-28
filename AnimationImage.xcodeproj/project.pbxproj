@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		EE0B1CC428DD8E9C00C52EF0 /* SDWebImageAVIFCoder in Frameworks */ = {isa = PBXBuildFile; productRef = EE0B1CC328DD8E9C00C52EF0 /* SDWebImageAVIFCoder */; };
 		EE0B1CC728DD90E600C52EF0 /* AvifImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0B1CC628DD90E600C52EF0 /* AvifImage.swift */; };
-		EE1A8EAE22A676CD00969F22 /* WebpFramework_umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */; };
 		EE341490268EF3C400149873 /* CGImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE34148F268EF3C400149873 /* CGImageExtension.swift */; };
 		EE341493268EFCB800149873 /* CGImageSourceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE341492268EFCB800149873 /* CGImageSourceExtension.swift */; };
 		EE394D2F22A6969200198FDB /* GifImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE394D2E22A6969200198FDB /* GifImage.swift */; };
@@ -72,8 +71,6 @@
 
 /* Begin PBXFileReference section */
 		EE0B1CC628DD90E600C52EF0 /* AvifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvifImage.swift; sourceTree = "<group>"; };
-		EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebpFramework_umbrella.h; sourceTree = "<group>"; };
-		EE1A8EAF22A6777800969F22 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		EE34148F268EF3C400149873 /* CGImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageExtension.swift; sourceTree = "<group>"; };
 		EE341492268EFCB800149873 /* CGImageSourceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageSourceExtension.swift; sourceTree = "<group>"; };
 		EE394D2E22A6969200198FDB /* GifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImage.swift; sourceTree = "<group>"; };
@@ -194,8 +191,6 @@
 			isa = PBXGroup;
 			children = (
 				EE394D2822A6964F00198FDB /* Animations */,
-				EE1A8EAF22A6777800969F22 /* module.modulemap */,
-				EE1A8EAD22A676A800969F22 /* WebpFramework_umbrella.h */,
 				EEBEE67522A4055D009CF602 /* AnimationImage.h */,
 				EEBEE68C22A40625009CF602 /* AnimationImage.swift */,
 				EEBEE67622A4055D009CF602 /* Info.plist */,
@@ -220,7 +215,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEBEE68322A4055D009CF602 /* AnimationImage.h in Headers */,
-				EE1A8EAE22A676CD00969F22 /* WebpFramework_umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

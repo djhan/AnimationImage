@@ -9,7 +9,7 @@
 import Foundation
 import Cocoa
 import CommonLibrary
-import AnimationImagePrivate
+import WebpFramework
 
 
 // MARK: - Typealiases -

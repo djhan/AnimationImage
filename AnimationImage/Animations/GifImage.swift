@@ -8,7 +8,6 @@
 
 import Cocoa
 import CommonLibrary
-import AnimationImagePrivate
 
 // MARK: - GIF Image Class -
 /**

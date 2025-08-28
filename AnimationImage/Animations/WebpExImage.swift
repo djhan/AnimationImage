@@ -8,7 +8,7 @@
 
 import Cocoa
 import CommonLibrary
-import AnimationImagePrivate
+import WebpFramework
 
 // MARK: - Webp Image Class -
 //================================================================================//
