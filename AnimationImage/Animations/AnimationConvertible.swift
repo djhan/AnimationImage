@@ -119,20 +119,20 @@ extension AnimationConvertible {
             }
             return Int(webpImage.frameCount)
 
-            // GIF 또는 PNG
-        case .gif, .png:
+            // GIF / PNG /AVIF
+        case .gif, .png, .avif:
             // imageSource가 없을 떄는 0 반환
             guard let imageSource = self.castedCGImageSource else {
                 return 0
             }
             return CGImageSourceGetCount(imageSource)
 
-            // AVIF
-        case .avif:
-            guard let avifImage = self as? AvifImage else {
-                return 0
-            }
-            return avifImage.numberOfItems
+//            // AVIF
+//        case .avif:
+//            guard let avifImage = self as? AvifImage else {
+//                return 0
+//            }
+//            return avifImage.numberOfItems
 
             // 그 외
         default: return 0
@@ -188,18 +188,18 @@ extension AnimationConvertible {
                 // new로 생성된 것이 아니기 때문에, unretained로 처리
                 cgImage = webpImage.cgImage(from: index)?.takeUnretainedValue()
 
-                // GIF/PNG 인 경우
-            case .gif, .png:
+                // GIF/PNG/AVIF 인 경우
+            case .gif, .png, .avif:
                 guard let imageSource = strongSelf.castedCGImageSource else { return }
                 cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
 
-                // avif인 경우
-            case .avif:
-                guard let avifImage = self as? AvifImage else { return }
-                // NSImage를 지정
-                image = avifImage.image(at: index)
-                // 여기서 중지 처리, 이미지 반환
-                return
+//                // avif인 경우
+//            case .avif:
+//                guard let avifImage = self as? AvifImage else { return }
+//                // NSImage를 지정
+//                image = avifImage.image(at: index)
+//                // 여기서 중지 처리, 이미지 반환
+//                return
 
                 // 그 외
             default:

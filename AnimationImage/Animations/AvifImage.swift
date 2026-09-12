@@ -9,22 +9,31 @@
 
 /// 특허 라이센스 문제로 비활성화 2022/10/03
 /// ventura 릴리즈로 ventura 이상에서만 작동되게 활성화 2022/10/27
+/// CGImageSource 사용으로 완전 교체 2026/05/26
 
 import Foundation
 import CommonLibrary
-import SDWebImageAVIFCoder
+import Cocoa
 
 // MARK: - AVIF Image Class -
 
 class AvifImage: DefaultAnimationImage, AnimationConvertible {
     
     /// 소스 타입 연관값
-    typealias SourceType = SDImageAVIFCoder
+    typealias SourceType = CGImageSource
     
     /// 이미지 소스
     var imageSource: SourceType? {
         didSet {
-            self.loopCount = self.imageSource?.animatedImageLoopCount ?? 0
+            // 첫 번째 이미지를 가져온다
+            if let firstImage = self[0] {
+                // 크기 설정
+                self.size = firstImage.size
+            }
+            // NSNumber로 loopCount 값을 받아온다
+            // 값을 받아오지 못한 경우는 실패 처리
+            guard let loopCount = self.dictionaryValue(at: NSNotFound, key: kCGImagePropertyGIFLoopCount as NSString) as? NSNumber else { return }
+            self.loopCount = UInt(truncating: loopCount)
         }
     }
     /// MacOS Ventrua의 이미지
@@ -39,33 +48,22 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
     
     /// 전체 이미지 개수
     var numberOfItems: Int {
-        guard let numberOfItems = self.imageSource?.animatedImageFrameCount else {
-            guard self._image != nil else {
-                // _image가 없는 경우, 0 반환
-                return 0
-            }
-            // _image가 있는 경우, 1 반환
-            return 1
-        }
-        return Int(numberOfItems)
+        guard let imageSource else { return 0 }
+        return CGImageSourceGetCount(imageSource)
     }
     
-    // MARK: Initialization
     /// 초기화
     /// - Parameters:
-    ///   - imageSource: 기본 이미지소스로 `SDImageAVIFCoder` 지정
+    ///   - imageSource: 기본 이미지소스로 `CGImageSource` 지정
     ///   - subImage: 기본 이미지소스로 초기화 실패시 `NSImage` 지정. MacOS ventrua 이상에서만 유효하다
-    init(from imageSource: SDImageAVIFCoder?, subImage: NSImage? = nil) {
+    init(from imageSource: CGImageSource?) {
         super.init()
         // 이미지 소스 대입
         self.imageSource = imageSource
-        if subImage != nil {
-            self._image = subImage
-        }
         // 소스 설정시 avif 로 설정
         self.type = .avif
     }
-    /// URL로 초기화
+  /// URL로 초기화
     convenience init?(from url: URL) {
         do {
             let data = try Data.init(contentsOf: url)
@@ -81,54 +79,28 @@ class AvifImage: DefaultAnimationImage, AnimationConvertible {
     
     /// Data로 초기화
     convenience init?(from data: Data) {
-        // 이미지 소스 생성
-        guard let imageSource = SDImageAVIFCoder.init(animatedImageData: data) else {
-            if #available(macOS 11.0, *) {
-                EdgeLogger.shared.imageIOLogger.log(level: .error, "\(#function) :: AVIF 이미지소스 생성 실패.")
-            }
-            
-            // MacOS 13.0 ventura 이상인지 확인
-            guard #available(macOS 13.0, *),
-                  let image = NSImage.init(data: data),
-                  image.size.width > 0, image.size.height > 0 else {
-                if #available(macOS 11.0, *) {
-                    EdgeLogger.shared.imageIOLogger.log(level: .error, "\(#function) :: 초기화 실패.")
-                }
-                return nil
-            }
-            
-            EdgeLogger.shared.imageIOLogger.log(level: .debug, "\(#function) :: Ventura 이상의 OS. w/h = \(image.size.width)/\(image.size.height).")
-            // 초기화
-            self.init(from: nil, subImage: image)
-            // exif data 추가
-            let imageSource = CGImageSourceCreateWithData(data as CFData, nil)
-            self.exifData = imageSource?.exifData
-            return
+        if #available(macOS 11.0, *) {
+            EdgeLogger.shared.imageIOLogger.log(level: .error, "\(#function) :: AVIF 이미지소스 생성 실패.")
         }
         
+        guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else {
+            return nil
+        }
         // 정상적으로 초기화
         self.init(from: imageSource)
-        
-        // MacOS 13.0 ventura 이상인 경우 exifData 생성 시도
-        if #available(macOS 13.0, *),
-           let imageSource = CGImageSourceCreateWithData(data as CFData, nil) {
-            self.exifData = imageSource.exifData
-        }
+        self.exifData = imageSource.exifData
     }
     
     /// 지연 시간
     func delayTime(at index: Int) -> Float {
-        return Float(self.imageSource?.animatedImageDuration(at: UInt(index)) ?? 0)
-    }
-    
-    /// 특정 인덱스의 NSImage
-    /// - SDImageAVIFCoder 로 초기화된 경우 사용 가능
-    func image(at index: Int) -> NSImage? {
-        guard index >= 0,
-              let imageSource = self.imageSource else {
-            return self._image
+        // delayTime을 NSNumber로 가져온다. 실패시 0.1초 반환
+        guard let delayTime = (self.dictionaryValue(at: index, key: kCGImagePropertyGIFDelayTime) as? NSNumber)?.floatValue else { return 0.1 }
+        // unclamped Delay Time이 있는지 확인
+        if let unclampeedDelayTime = (self.dictionaryValue(at: index, key: kCGImagePropertyGIFUnclampedDelayTime) as? NSNumber)?.floatValue {
+            if unclampeedDelayTime < delayTime {
+                return unclampeedDelayTime
+            }
         }
-        // NSImage로 반환
-        return imageSource.animatedImageFrame(at: UInt(index))
-    }
+        return delayTime
+  }
 }
